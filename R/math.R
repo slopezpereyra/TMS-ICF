@@ -1,3 +1,6 @@
+# Math required for pulse-specific, weighted relative amplitude
+# estimation.
+
 library(stats)
 
 
@@ -21,4 +24,3 @@ robust_zscores <- function(v) {
     return(rz)
 }
 
-robust_zscores(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))

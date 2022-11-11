@@ -65,16 +65,6 @@ full_group_analysis <- function(df) {
 
     return(result)
 }
-df <- load_data() %>% clean_data()
-an <- analysis(df)
-an
-
-gan <- group_type_analysis(an, "HC BL")
-gan
-View(gan)
-final <- full_group_analysis(an)
-View(final)
-
 
 plot_analysis <- function(df) {
     p <- ggplot(df, aes(x = ISI, y = RA, group = Label, color = Label)) +
