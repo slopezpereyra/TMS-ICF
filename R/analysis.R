@@ -14,14 +14,11 @@ analyze_subject <- function(df, subject, session) {
     dmeans <- c()
     for (isi in (unique(sort(d_df$ISI)))) {
         ind <- which(df$ISI == isi)
-        print(isi)
         if (nrow(df) == 120) {
             ind <- ind + 1
         }
         d <- df[ind, ] %>% pull(EMGPeakToPeak)
-        print(d)
         avg_emg <- mean(d)
-        print(avg_emg)
         dmeans <- append(dmeans, avg_emg)
     }
     ras <- dmeans / mean(t)
@@ -38,11 +35,8 @@ analyze_subject <- function(df, subject, session) {
 analysis <- function(df) {
     result <- tibble()
     for (subject in unique(df$Subject)) {
-        s1 <- df %>% analyze_subject(subject, 1)
-        s2 <- df %>% analyze_subject(subject, 2)
-        result <- result %>%
-            bind_rows(s1) %>%
-            bind_rows(s2)
+        result <- result %>% bind_rows(analyze_subject(df, subject, 1), 
+                                        analyze_subject(df, subject, 2))
     }
     return(result)
 }
@@ -64,14 +58,11 @@ group_type_analysis <- function(df, label) {
 }
 
 full_group_analysis <- function(df) {
-    a <- group_type_analysis(df, "HC BL")
-    b <- group_type_analysis(df, "HC SWD")
-    c <- group_type_analysis(df, "MDD BL")
-    d <- group_type_analysis(df, "MDD SWD")
-    result <- a %>%
-        bind_rows(b) %>%
-        bind_rows(c) %>%
-        bind_rows(d)
+    result <- bind_rows(group_type_analysis(df, "HC BL"),
+        group_type_analysis(df, "HC SWD"), 
+        group_type_analysis(df, "MDD BL"),
+        group_type_analysis(df, "MDD SWD"))
+
     return(result)
 }
 df <- load_data() %>% clean_data()
@@ -87,12 +78,9 @@ View(final)
 
 plot_analysis <- function(df) {
     p <- ggplot(df, aes(x = ISI, y = RA, group = Label, color = Label)) +
-        geom_line()
+        geom_line() +
+        geom_point(aes(x=ISI, y=RA, group=Label))
     p
 }
 
 
-plot_analysis(final)
-
-a
-a$Type
