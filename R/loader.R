@@ -1,3 +1,4 @@
+getwd()
 library(tidyr)
 library(readr)
 library(dplyr)
@@ -77,12 +78,12 @@ get_session_as_number <- function(session_name) {
 #' of d and a with weights being penalties based
 #' on the rz-scores of components of t.
 pulse_ra <- function(d, t) {
-    t_penalty <- quad_penalty(robust_zscores(t), alpha=1)
+    t_penalty <- quad_penalty(robust_zscores(t), alpha = 1)
     return(sum(d * t^(-1) * t_penalty) / sum(t_penalty))
 }
 
 pulse_gra <- function(d, t) {
-    t_penalty <- gaussian_penalty(robust_zscores(t), alpha=1)
+    t_penalty <- gaussian_penalty(robust_zscores(t), alpha = 1)
     return(sum(d * t^(-1) * t_penalty) / sum(t_penalty))
 }
 
@@ -142,6 +143,19 @@ create_pra_col <- function(t) {
     return(aras)
 }
 
+create_pra_col_noweights <- function(t) {
+    test_pulses <- t %>%
+        subset(ISI == -1) %>%
+        pull(`EMG Peak-to-peak 1`)
+
+    d_pulses <- t %>% pull(`EMG Peak-to-peak 1`)
+    ras <- c()
+    for (d in d_pulses) {
+        ras <- append(ras, d / mean(test_pulses))
+    }
+    return(ras)
+}
+
 
 create_pra_col_gaussian <- function(t) {
     test_pulses <- t %>%
@@ -156,17 +170,17 @@ create_pra_col_gaussian <- function(t) {
     return(aras)
 }
 
-get_label <- function(df){
-    if ((df$Group[1] == 1) && (df$Type == "SWD")){
+get_label <- function(df) {
+    if ((df$Group[1] == 1) && (df$Type == "SWD")) {
         return("HC SWD")
     }
-    if ((df$Group[1] == 1) && (df$Type == "BL")){
+    if ((df$Group[1] == 1) && (df$Type == "BL")) {
         return("HC BL")
     }
-    if ((df$Group[1] == 2) && (df$Type == "SWD")){
+    if ((df$Group[1] == 2) && (df$Type == "SWD")) {
         return("MDD SWD")
     }
-    if ((df$Group[1] == 2) && (df$Type == "BL")){
+    if ((df$Group[1] == 2) && (df$Type == "BL")) {
         return("MDD BL")
     }
 }
@@ -198,14 +212,16 @@ load_data <- function() {
         if (is.null(t$ISI)) {
             next
         }
-        t <- t %>% add_column(create_pra_col(t)) %>%
+        t <- t %>%
+            add_column(create_pra_col_noweights(t)) %>%
+            add_column(create_pra_col(t)) %>%
             add_column(create_pra_col_gaussian(t)) %>%
-                    add_column(Label = rep(get_label(t)))
+            add_column(Label = rep(get_label(t)))
         df <- bind_rows(df, t)
     }
     colnames(df) <- c(
         "Sample", "Session", "EMGPeakToPeak",
-        "Subject", "Type", "Group", "ISI", "RA", "GRA",
+        "Subject", "Type", "Group", "ISI", "RRA", "RA", "GRA",
         "Label"
     )
     return(df)
@@ -269,4 +285,3 @@ integrity_test <- function(df) {
     }
     return(wrongs)
 }
-
