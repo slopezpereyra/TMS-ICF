@@ -3,7 +3,6 @@ library(tidyr)
 library(readr)
 library(dplyr)
 library(tibble)
-source("R/math.R")
 
 # GLOBALS
 # -1 = test pulse, 0 conditioned pulse
@@ -72,103 +71,6 @@ get_session_as_number <- function(session_name) {
     )
 }
 
-#' A single double-pulse d, a vector of test
-#' pulses t.
-#' Computes weighted average of the dot product
-#' of d and a with weights being penalties based
-#' on the rz-scores of components of t.
-pulse_ra <- function(d, t) {
-    t_penalty <- quad_penalty(robust_zscores(t), alpha = 1)
-    return(sum(d * t^(-1) * t_penalty) / sum(t_penalty))
-}
-
-pulse_gra <- function(d, t) {
-    t_penalty <- gaussian_penalty(robust_zscores(t), alpha = 1)
-    return(sum(d * t^(-1) * t_penalty) / sum(t_penalty))
-}
-
-load_data_old <- function() {
-    df <- tibble()
-    for (file in list.files(DATA_DIR)) {
-        path <- paste(DATA_DIR, file, sep = "/")
-        print(file)
-
-        t <- read_delim(path,
-            delim = "\t", comment = "#", na = c("", "NA", "(null)"),
-            col_types = cols_only(
-                `Sample Name` = col_character(),
-                `Session Name` = col_character(),
-                `EMG Peak-to-peak 1` = col_number()
-            )
-        )
-        ind <- grep("ICF", t$`Sample Name`) # Get indexes of all ICF Start/End Markers
-        t <- t[ind[1]:ind[2], ]
-        t$Subject <- rep(get_subject_from_fn(file), nrow(t))
-        session <- ifelse(t$`Session Name`[1] == "Session 1", 1, 2)
-        t$Type <- rep(get_session_type(t$Subject[1], session))
-        t$Group <- rep(get_subj_group(t$Subject[1]))
-        t$ISI <- create_isi_col(t)
-        if (is.null(t$ISI)) {
-            next
-        }
-        test_pulses <- t %>%
-            subset(ISI == -1) %>%
-            pull(`EMG Peak-to-peak 1`)
-        d_pulses <- t %>% pull(`EMG Peak-to-peak 1`)
-
-        aras <- c()
-        for (d in d_pulses) {
-            aras <- append(aras, pulse_ra(d, test_pulses))
-        }
-        t$RA <- aras
-        df <- bind_rows(df, t)
-    }
-    colnames(df) <- c(
-        "Sample", "Session", "EMGPeakToPeak",
-        "Subject", "Type", "Group", "ISI", "RA"
-    )
-    return(df)
-}
-
-create_pra_col <- function(t) {
-    test_pulses <- t %>%
-        subset(ISI == -1) %>%
-        pull(`EMG Peak-to-peak 1`)
-    d_pulses <- t %>% pull(`EMG Peak-to-peak 1`)
-
-    aras <- c()
-    for (d in d_pulses) {
-        aras <- append(aras, pulse_ra(d, test_pulses))
-    }
-    return(aras)
-}
-
-create_pra_col_noweights <- function(t) {
-    test_pulses <- t %>%
-        subset(ISI == -1) %>%
-        pull(`EMG Peak-to-peak 1`)
-
-    d_pulses <- t %>% pull(`EMG Peak-to-peak 1`)
-    ras <- c()
-    for (d in d_pulses) {
-        ras <- append(ras, d / mean(test_pulses))
-    }
-    return(ras)
-}
-
-
-create_pra_col_gaussian <- function(t) {
-    test_pulses <- t %>%
-        subset(ISI == -1) %>%
-        pull(`EMG Peak-to-peak 1`)
-    d_pulses <- t %>% pull(`EMG Peak-to-peak 1`)
-
-    aras <- c()
-    for (d in d_pulses) {
-        aras <- append(aras, pulse_gra(d, test_pulses))
-    }
-    return(aras)
-}
 
 get_label <- function(df) {
     if ((df$Group[1] == 1) && (df$Type == "SWD")) {
@@ -189,7 +91,6 @@ load_data <- function() {
     df <- tibble()
     for (file in list.files(DATA_DIR)) {
         path <- paste(DATA_DIR, file, sep = "/")
-        print(file)
 
         t <- read_delim(path,
             delim = "\t", comment = "#", na = c("", "NA", "(null)"),
@@ -213,16 +114,12 @@ load_data <- function() {
             next
         }
         t <- t %>%
-            add_column(create_pra_col_noweights(t)) %>%
-            add_column(create_pra_col(t)) %>%
-            add_column(create_pra_col_gaussian(t)) %>%
             add_column(Label = rep(get_label(t)))
         df <- bind_rows(df, t)
     }
     colnames(df) <- c(
         "Sample", "Session", "EMGPeakToPeak",
-        "Subject", "Type", "Group", "ISI", "RRA", "RA", "GRA",
-        "Label"
+        "Subject", "Type", "Group", "ISI", "Label"
     )
     return(df)
 }
