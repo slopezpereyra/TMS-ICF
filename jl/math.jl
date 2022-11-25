@@ -1,3 +1,8 @@
+
+function weighted_avg(a, penalties)
+    sum(a .* penalties) / sum(penalties)
+end
+
 function p(d::Number, t::Vector, f=Φ)::Number
     """Computes weighted, pulse-specific relative
     amplitude given a paired-pulse d and a series
@@ -18,21 +23,15 @@ function p(d::SubArray, t::Vector, f=Φ)::Vector
     broadcast(h, d)
 end
 
-
-function rawp(d::Vector, t::Vector)::Vector
-    d ./ mean(t)
-end
-
-function rawp(d::SubArray, t::Vector)::Vector
-    d ./ mean(t)
-end
-
 function ℒ(θ::Vector, d::Vector, f)
     w = broadcast(f, d)
     sum(θ .* w) / sum(w)
 end
 
-function Φ(x, α=1)
+# Penalty functions. See fourth chapter
+# of paper in progress.
+
+function Φ(x, α=3)
     α / (x^2 + α)
 end
 
@@ -43,8 +42,12 @@ end
 function ∅(x)
     x
 end
+
+# Robust z-score
+
 function rzs(x::Vector)::Vector
+    """Given a vector x, returns a vector with the 
+    robust z-scores of each element of x."""
     mad = median(abs.(x .- median(x)))
     0.675 * (x .- median(x)) / mad
-
 end
