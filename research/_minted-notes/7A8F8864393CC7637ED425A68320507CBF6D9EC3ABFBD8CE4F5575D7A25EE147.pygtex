@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+    \PYG{n}{bag\PYGZus{}clf} \PYG{o}{=} \PYG{n}{AdaBoostClassifier}\PYG{p}{(}
+        \PYG{n}{DecisionTreeClassifier}\PYG{p}{(}\PYG{n}{max\PYGZus{}depth}\PYG{o}{=}\PYG{l+m+mi}{8}\PYG{p}{),}
+        \PYG{n}{n\PYGZus{}estimators}\PYG{o}{=}\PYG{l+m+mi}{20}\PYG{p}{,}
+        \PYG{n}{algorithm}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}SAMME.R\PYGZsq{}}\PYG{p}{,}
+        \PYG{n}{learning\PYGZus{}rate}\PYG{o}{=}\PYG{l+m+mf}{0.01}\PYG{p}{)}
+\end{Verbatim}

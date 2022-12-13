@@ -1,4 +1,3 @@
-getwd()
 library(tidyr)
 library(readr)
 library(dplyr)
@@ -16,6 +15,7 @@ ISI_ORDER_120 <- c(
     0, -1, 15, 0, 15, 0, 4, 0, 8, 0, 20, 0, 4, 0, 20,
     0, 4, 0, -1, -1, 10, 0, 20, 0, -1, 15, 0, 5, 0, 20, 0, 4, 0
 )
+
 ISI_ORDER_72 <- c(
     10, 8, -1, 10, -1, 20, -1, 15, 10, 20, 8, 10, 15, -1, 8, -1, 10, -1,
     5, -1, 5, 10, 8, 4, 8, -1, 4, -1, 4, 5, -1, 20, -1, -1, -1, 5, 5,
@@ -27,9 +27,6 @@ WD <- getwd()
 DATA_DIR <- paste(WD, "Data/", sep = "/")
 PARTS_INFO <- read_csv("TMS_ptinfo.csv")
 PARTS_INFO
-
-
-
 
 #' Use .txt file name to find subject number and return it as numeric.
 #'
@@ -71,7 +68,8 @@ get_session_as_number <- function(session_name) {
     )
 }
 
-
+# Horrible but serves its purpose and will
+# only be called once in human history.
 get_label <- function(df) {
     if ((df$Group[1] == 1) && (df$Type == "SWD")) {
         return("HC SWD")
@@ -90,6 +88,7 @@ get_label <- function(df) {
 load_data <- function() {
     df <- tibble()
     for (file in list.files(DATA_DIR)) {
+        print(file)
         path <- paste(DATA_DIR, file, sep = "/")
 
         t <- read_delim(path,
@@ -150,6 +149,7 @@ recode_by_patterns <- function(vec, pattern, subpatterns, new_value) {
     return(vec)
 }
 
+#' Wrapper
 get_subject_data <- function(df, subject) {
     df <- df %>% subset(Subject == subject)
     return(df)
@@ -165,7 +165,9 @@ create_isi_col <- function(df) {
         } else if (len == 72) # If this ICF has 120 pulses.
         {
             vec <- ISI_ORDER_72
-        } else {
+        } else if (len == 118) {
+        vec <- ISI_ORDER_120[1:118] # Special case (see Elly's mails)
+    } else {
         warning(paste("ICF INTEGRITY WARNING: ", len, " on subject ", df$Subject[1]))
         return
     }
@@ -182,3 +184,19 @@ integrity_test <- function(df) {
     }
     return(wrongs)
 }
+
+df <- load_data() %>% clean_data()
+write_csv(df, "df.csv")
+View(df)
+t <- read_delim("SWIP_018_S1.txt",
+    delim = "\t", comment = "#", na = c("", "NA", "(null)"),
+    col_types = cols_only(
+        `Sample Name` = col_character(),
+        `Session Name` = col_character(),
+        `EMG Peak-to-peak 1` = col_number()
+    )
+)
+
+View(t)
+View(get_subject_data(df, 9))
+df
