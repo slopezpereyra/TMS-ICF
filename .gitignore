@@ -5,8 +5,20 @@
 #CSVs
 .csv
 
+#LaTex 
+.gz
+.log
+.pdf
+.fdb_latexmk
+.pyg
+.fls 
+.aux 
+
 #Images
 .png
+
+# Julia
+*.toml
 
 # Session Data files
 .RData
