@@ -1,6 +1,8 @@
 
 \documentclass{article}
+\usepackage{subfigure}
 \usepackage{amsmath}
+\usepackage{float}
 \usepackage{ragged2e}
 \usepackage{amssymb}
 \usepackage[utf8]{inputenc}
@@ -23,14 +25,25 @@
 
 \section{Introduction}
 
-The emergence of new computational models has provided neuroscientific research
-with novel methods for extracting significant insights from experimental results.
-This paper takes a computational approach to challenges arising in the analysis
-of transcranial stimulation (TMS) data. We argue that conducting TMS experiments
-under the double-pulse paradigm enables the use of machine learning models. In
-particular, we formulate pulse-specific measures of relative amplitude between
-paired and test pulses. These has potential implications in both $a.$ the
-production of evidence and $b$. the diagnosis of clinical disorders.
+The emergence of new computational models has provided neuroscientists with
+novel ways of extracting significant insights from experimental data. This paper
+takes a computational approach to challenges arising from the analysis of
+transcranial magnetic stimulation (TMS) data under the double pulse paradigm. We
+argue that using indicators of neuroplasticity for each specific double
+stimulation, as opposed to their average, allows for the use of data-driven
+methods of analysis. 
+
+Particularly, we formulate pulse-specific measures of relative amplitude between
+paired and test pulses. These measures represent the proportionality of specific
+paired-pulse responses with respect to test-pulse responses. Namely, they serve as
+proxies for neuroplasticity in the brain by capturing the degree of
+inhibition or facilitation induced by each double-stimulation.
+
+The benefits of data-driven methods of analysis cannot be overstated. Their
+potential implication in the production of scientific evidence and the
+diagnosis of clinical disorders go beyond the scope of this paper and deserve
+further investigation.
+
 
 \section{Background}
 
@@ -58,20 +71,18 @@ single pulses. Greater intervals, on the other hand, tend to
 produce facilitation. 
 
 
-In the context of this paper, we shall term any coefficient
-that serves to represent the proportional relationship
-between the potentials evoked by paired and test pulses a
-\textit{measure of relative amplitude}. 
-
+In the context of this paper, we shall term any coefficient that serves to
+represent the proportional relationship between the potentials evoked by paired
+and test pulses a \textit{measure of relative amplitude} (MRA).
 
 The goal of this paper is to provide pulse-specific measures of relative
 amplitude. This is, coefficients that represent the relative amplitude of each
 individual paired pulse with respect to the set of test pulses in an
-experimental session. The purpose of this endeavor is to keep data resolution
-at its highest, which on its turn allows for the implementation of data-driven
-artificial intelligence in the analysis of the 
-experimental results. Thus, from a computer science perspective, our objective is
-constrained to the sphere of feature engineering. 
+experimental session. The benefit of this is that it keeps data resolution at
+its highest, which allows for the implementation of data-driven artificial
+intelligence in the analysis of the experimental results. Thus, from a computer
+science perspective, our objective is constrained to the sphere of feature
+engineering. 
 
 We will show how pulse-specific measures of relative amplitude allow for
 otherwise unfeasible computational analyses of TMS data, such as the use of
@@ -82,19 +93,24 @@ subject belongs to one of four clinical categories, based only on its evoked
 potentials and across different inter-stimulus intervals, with an accuracy of up to
 $90\%$.
 
-\section{Data collection}
+\section{Dataset}
 
-We used data collected across $N = ?$ subjects at the \textit{Laboratory for the
-Study of Slow-wave sleep activity}, University of Pennsylvania, with $H = ?$
-healthy controls and $D = ?$ diagnosed with major depressive disorder (MDD).
-Transcranial magnetic stimulation of the motor cortex was elicited to them after
-a night of baseline sleep and after a night of slow-wave disruption (SWD) sleep.
-Motor evoked potentials were measured via an electrode (?) placed on the
-subjects' thumb (?). In the slow-wave disruption session, an auditory stimulus with
-sufficient strength to interrupt the normal occurrence of slow-wave sleep, yet
-not strong enough to wake the subjects, was elicited. This experimental setting
-produces four distinct categories, two depending on the subject group and two on
-the type of sleep session underwent, as shown in the table below.
+Our case study uses data from $N = 43$ subjects at UPenn's \textit{Lab for the
+Study of Slow-wave sleep activity}, with $H = 17$ healthy controls (HC) and $D =
+26$ with major depressive disorder (MDD). Subjects received transcranial
+magnetic stimulation of the motor cortex after both a night of baseline sleep
+and a night of slow-wave disruption (SWD) sleep. The stimulations were performed
+under the double pulse paradigm. Per session, subjects received twenty-four
+($24$) test pulses in total and eight ($8$) paired pulses per ISI. The ISIs were
+$4, 5, 8, 10, 15$ and $20$. The evoked potentials were measured by placing an
+EMG electrode on the targeted muscle of the thumb. In the slow-wave disruption
+session, we sent a constant auditory stimulus with sufficient strength to
+interrupt the normal occurrence of slow-wave sleep, yet not strong enough to
+wake the subjects.
+
+Please see the table below to see the resulting subject categories:
+
+~
 
 ~
 
@@ -105,265 +121,28 @@ the type of sleep session underwent, as shown in the table below.
 Healthy control & HC BL & HC SWD \\
 \hline
 Major depressive disorder & MDD BL & MDD SWD \\
-\hli
+\hline
 \end{tabular}
 
 ~
 
-Each observation in the data was a specific experimental sample resulting
-from an individual transcranial stimulation. The original features of the data
-were: 
+~
+
+Each observation comes from an individual transcranial stimulation. The features
+of the resulting database are:
 
 \begin{enumerate}
-    \item An $EMG$ variable with the EMG peak-to-peak of each observation.
-    \item A $Label$ categorical feature, which encoded the group of
-        the subject of each observation, was the target variable. 
-    \item An $ISI$ feature that econded the inter-stimulus interval of each
+    \item An $EMG$ variable with the peak-to-peak EMG of each elicited pulse.
+    \item A $Label$ categorical feature, which represents the group of
+        the subject of each observation. 
+    \item An $ISI$ feature that represents the inter-stimulus interval of each
         pulse. A value of $-1$ indicated that the given pulse was a test pulse (no
         inter-stimulus interval).
 \end{enumerate}
 
-\section{Limitations of the traditional analysis}
-
-Measures of relative amplitude in neuroscience are generally computed at the
-subject level by repeatedly taking averages in the following manner. First, the
-quotient of the average paired-pulse and the average test pulse is found per
-every subject. Secondly, those quotients are averaged out across all subjects in
-a subject group. This is reasonable, since hypotheses generally deal with
-differences across subject groups. 
-
-Two major limitations arise from this method. The principle one is the fact that
-it implies greatly downscaling the data resolution Secondly, potentials evoked
-by test and paired pulses present a very high variance (Rossini et. al., 20015;
-Orth, Snijders and Rothwell, 2003; Wassermann, 2002), which —being that it is a
-quotient of two means—  raises questions about the quality of the representation
-where relatively few pulses are elicited. 
-
-When considering the size of the data across multiple experimental subjects,
-this shrinkage in data resolution is far from being negligible. And in times
-when scientific inquiry can greatly benefit from forms of artificial
-intelligence that rely on large amounts of data (e.g. machine learning), it is
-clearly limiting to only count with low-resolution measures to interpret
-experimental results.
-
-
-\section{Proposed approach}
-
-\subsection{Pulse-specific relative amplitude measures}
-
-Considering the limitations of the traditional approach, this paper proposes two
-pulse-specific relative amplitude measures. This allows for otherwise unfeasible
-computational analyses of TMS data, such as the use of machine learning (ML) models
-for the detection of different pulse-response patterns among different groups of
-clinical subjects.
-
-To empirically test the validity of these measures, we evaluated whether they
-improved the performance of a classification model, and in what degree. (We
-chose a classification model for practical reasons --namely, because the
-samples in our data were conveniently labeled by subject group and sleep
-session). 
-
-In order to do this, we defined a random forest model in Python under the
-following parameters: \ldots
-
-The model was tasked with classifying every observation with the appropriate subject
-label. In other words, it was set out to infer, based on the properties of each
-transcranial stimulation response, the group of the subject upon which the
-stimulation was elicited, as well as the type of sleep session after which it
-occurred.
-
-The model was first trained on the raw data, with the features described in
-\textbf{3.1}. Then, it was trained with the inclusion of one or many engineered
-features of relative amplitude (see section \textbf{4}). These features were
-computed for each observation using the Julia programming language.
-
-Since the neural response to transcranial stimulations follows an exponential
-distribution (see \textbf{Cite section}), we experimented with the inclusion of
-the features above applied to the logarithmically transformed peak-to-peak EMG.
-
-As stated earlier, action potentials evoked by transcranial magnetic
-stimulations follow a Gamma distribution that is very close to the exponential.
-(see \textbf{Statistics} section). Experimentation has shown that the inclusion
-of weighted variants of the features defined above greatly improves the
-performance of a random forests model (see \textbf{Empirical results}).
-
-The use of weighted instead of arithmetic averages may be useful in dealing with
-the excessive influence of outliers or highly spread out points in the feature.
-For example, the weight vectors may be computed using the MAD or the
-inverse-variance of each $x$. 
-
-Thus, our hypothesis is that pulse-specific measures of relative
-amplitude will significantly improve a random forest's performance.
-
-The following section (\textbf{Cite section}) defines the proposed measures of
-relative amplitude. In section \textbf{Results}, we show the impact of these
-measures on the performance of the random forest model.
-
-\subsection{Definitions: Pulse specific relative amplitudes}
-
-For simplicity, we will deal with the hypothetical situation
-in which a single ISI was used for paired stimulations. All
-of our results generalize to different inter-stimulus intervals.
-
-Let $k$ be the number of experimental subjects in some
-subject group $\mathcal{G}$, to each of whom $n$ paired stimulations and
-$m$ test stimulations were elicited.
-
-\begin{definition}
-
-Let $\textbf{P}^{n \times k}, \textbf{T}^{m\times k}$ be matrices over the
-vector space $\mathbb{R}^+$ representing
-the paired and test potentials evoked across each of the $k$ subjects.
-
-\end{definition}
-
-\begin{definition} 
-    Let $x \in \textbf{P}_{\star i}$ be the MEP of a single paired stimulation
-    elicited on the $i$th experimental subject, and $\textbf{t} =
-    \textbf{T}_{\star i}$ the vector containing the MEPs of all test pulses
-    elicited on that subject. Let $\textbf{w}$ be some appropriate weight
-    vector. Then we define two pulse-specific relative amplitude measures,
-
-    \begin{equation} 
-        \rho(x) := \frac{mx}{\sum_{i=1}^mt_j}
-    \end{equation}
-
-    \begin{equation} 
-        \delta(x) := \frac{x}{m}\sum_{j=1}^m\frac{1}{t_j} 
-    \end{equation}
-
-    \begin{equation}
-            \rho_w(x) &:= \frac{xm\sum_{j=1}^m w_j}{\sum_{j=1}^m t_j w_j} \\ 
-    \end{equation}
-
-    \begin{equation}
-        \delta_w(x) &:= \frac{\frac{x}{m}\sum_{j=1}^m\frac{w_j}{t_j}}{\sum_{j=1}^mw_j} 
-    \end{equation}
-\end{definition}
-
-\begin{remark} 
-    $\forall x: x \in \mathbb{R}^+:\delta(x) \geq \rho(x)$. (For a proof of this
-    property, consult the appendix.) 
-\end{remark}
-
-Notice that $\rho(x)$ is the proportion between the potential $x$, evoked by a
-paired stimulation, with respect to the average potential of single test
-stimulations. On the other hand, $\delta(x)$ is the average proportion of $x$
-with respect to each single test pulse. 
-
-Notice as well that $\rho$ and $\delta$ are defined over the test pulses in a
-specific experimental session $i$. In other words, whenever we speak of the
-$\delta$ and $\rho$ \textit{features} (\textit{id est}, of the data resulting from
-broadcasting $\rho$ and $\delta$ over a series of observations), such feature is
-understood to be subject- and session-specific.
-
-In particular, $\rho$ is a representation of the relative importance of each
-double pulse in relation to the overall distribution of the test pulses in the
-subject. It measures the deviation of the double pulse $x$ with respect to the
-average test pulse. On the other hand, $\delta$ is a measure of the
-proportionality of a double pulse with respect to different values in the
-distribution of the test pulses of the subject.
-
-\section{Results}
-
-\subsection{ML model without relative amplitude measures}
-
-When trained on the raw data, without the inclusion of pulse-specific relative
-amplitude measures, the model's accuracy was of $\approx34.2 \%$. However, the
-confusion matrix of the model shows the errors are concentrated on the healthy
-control categories, while categorization of diagnosed subjects was substantially
-better. This implies major depressive subjects show statistically significant
-and distinct patterns in their TMS responses in comparison to healthy controls,
-and may be considered evidence for depression-induced differences in
-neuroplasticity.
-
-\end{multicols}
-
-\centering
-~
-
-\includegraphics[scale=0.4]{cm-raw}
-
-
-\justifying
-\begin{multicols}{2}
-
-However, it is important to note that the proxy for neuroplasticity in the
-double pulse paradigm is precisely the relative amplitude of double pulses with
-respect to test pulses. The raw data lacks any measure of relative amplitude.
-Besides, regardless of the fact that the model above suggests a critical
-difference in the response patterns between subject groups, its accuracy is
-still poor.
-
-\subsection{Engineered data}
-
-With the inclusion of the $\rho$ feature, accuracy increases by a factor of
-$\approx 2.1$ to $72.6\%$. The inclusion of the $\delta$ feature alone increased
-it, in comparison to the raw data, had a more or less equivalent impact,
-increasing accuracy to $73.4\%$.
-
-
-\end{multicols}
-\raggedright
-
-~
-
-\includegraphics[scale=0.24]{cm-rho}
-\raggedright
-\includegraphics[scale=0.24]{cm-delta}
-
-
-
-\justifying
-\begin{multicols}{2}
-
-The model still shows a higher accuracy when classifying diagnosed subjects, but
-the overall accuracy across all categories was significantly improved.
-
-As stated earlier, the inclusion of the $\delta$ and $\rho$ features computed
-over the logarithmically transformed EMG peak-to-peak improved the model's
-accuracy. Concretely, accuracy was increased to $86\%$, with the following
-confusion matrix.
-
-\end{multicols}
-
-~
-\centering
-
-\includegraphics[scale=0.4]{cm-dr-ln}
-
-
-\justifying
-\begin{multicols}{2}
-
-At last, if to the previous model we add also the weighted versions of $\delta$
-and $\rho$, using inverse-variance weights, we obtained an accuracy of $89.8\%$,
-with the following confusion matrix.
-
-\end{multicols}
-
-\centering
-~
-
-\includegraphics[scale=0.4]{final-cm}
-
-
-\justifying
-\begin{multicols}{2}
-
-
-
-\section{Statistics}
-
-\begin{wrnote}
-    The description of the experimental process in this section is poor. Also I
-    do not know the total number of subjects, experiments are still being
-    conducted. Need input from the lab on these matters.
-\end{wrnote}
-
-
-Although distributions were always exponential, the $\beta$ parameter of said
-distributions varied across subject groups and session types. 
+The distribution of the evoked potentials was always exponential. However, the
+$\beta$ parameter of the distribution varies across subject groups and session
+types, as shown in Figures \ref{fig:figure1} and \ref{fig:figure2}.
 
 ~
 
@@ -383,59 +162,276 @@ distributions varied across subject groups and session types.
 
 ~ 
 
-Each of the means in the above table correspond to the estimated $\beta$
+Each of the means in the above table corresponds to the estimated $\beta$
 parameter of the distribution of the paired pulses on each subject group.
 
-\end{multicols}
-\raggedright
+\begin{figure*}
+  \begin{minipage}[b]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{Paired-TestDist}
+    \caption{Distribution of paired and test pulses}
+    \label{fig:figure1}
+  \end{minipage}
+  \hspace{0.04\linewidth}
+  \begin{minipage}[b]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{P-dist-subjects-big}
+    \caption{Distribution of paired pulses across subject groups}
+    \label{fig:figure2}
+  \end{minipage}
+\end{figure*}
 
-~
-
-\includegraphics[scale=0.14]{Paired-TestDist}
-\raggedright
-\includegraphics[scale=0.14]{P-dist-subjects-big}
 
 
-
-\justifying
-\begin{multicols}{2}
+\section{Limitations of the traditional TMS method of analysis}
 
 
+Measures of relative amplitude in neuroscience are generally computed at the
+subject and group level by repeatedly taking averages. This is natural, since
+scientific interest generally resides in evaluating differences across subject
+groups. However, it also raises problems pertaining to
+the downscaling of the data resolution and the reliability of the resulting values.
+
+The procedure to establish the average relative amplitude of a group of subjects
+(for example, healthy controls) is simple. Traditionally, it involves taking the
+quotient of the average paired-pulse and the average test pulse responses per
+every subject. Next, those quotients are averaged out across all subjects in the
+subject group. In short, it is an average of averages. 
+
+Although this practice is not arbitrary ---since hypotheses generally deal with differences
+across subject groups--- it has three major limitations. Firstly, it implies
+greatly downscaling the data resolution, making data-driven methods of analysis
+unfeasible. Secondly, potentials evoked by test and paired pulses present a very
+high variance (Rossini et. al., 20015; Orth, Snijders and Rothwell, 2003;
+Wassermann, 2002), which —being that it is a quotient of two means—  raises
+questions about the quality of the representation where relatively few pulses
+are elicited. Thirdly, our observations suggest potentials evoked by TMS
+stimulations follow an exponential distribution, which puts in question whether
+arithmetic means are a reliable measure of central tendency.
+
+To make matters worse, when considering the size of the data across multiple
+experimental subjects, the shrinkage in data resolution is far from negligible.
+And in times when scientific inquiry can greatly benefit from forms of
+artificial intelligence that rely on large amounts of data (e.g. machine
+learning), it is clearly limiting to count solely with low-resolution measures
+to interpret experimental results.
+
+
+\section{Proposed approach}
+
+\subsection{Pulse-specific relative amplitude measures}
+
+In light of the technical concerns about the traditional approach, this paper
+proposes two pulse-specific relative amplitude measures. This allows for
+otherwise unfeasible computational analyses of TMS data, such as the use of
+machine learning (ML) models for the detection of different pulse-response
+patterns among different groups of clinical subjects.
+
+Pulse-specific measures of relative amplitude are coefficients that represent,
+for every experimental subject, the proportionality of each individual
+paired-pulse response with respect to the set of \textit{all} test-pulse
+responses. From a neuroscientific perspective, they are a proxy for
+neuroplasticity at the level of each particular stimulation, measuring the
+amount facilitation or inhibition in each specific response. From a
+computational perspective, these measures prescind from the need of averaging
+paired-pulses out, and thus keep data resolution at its highest.
+
+In order to test these measures, we look at whether they improve the performance
+of a ML classification model and in what degree.\footnote{We use a
+classification model for practical reasons ---namely, because the samples in our
+data were conveniently labeled by subject group and sleep session.} Our case
+study is a random forest model in Python tasked with classifying every
+observation with the appropriate subject label. In other words, its goal is to
+infer, based on the properties of each TMS response, the group of the subject
+upon which the stimulation was elicited, as well as the type of sleep session
+after which it occurred. Our hypothesis is that pulse-specific measures of relative
+amplitude will significantly improve a random forest's performance.
+
+Section \textbf{5} provides the mathematical definitions of our measures of
+relative amplitude. Section \textbf{6} discusses the impact of each measure on
+the performance of the random forest model. Specifically, section \textbf{6.1}
+shows the performance of the model when trained over the raw data (i.e. the
+features described in section \textbf{3.1}). Section \textbf{6.2} shows the
+performance of the model when including pulse-specific measures of relative
+amplitude. Section \textbf{6.3} shows the performance of the model when combining the
+pulse-specific measures with logarithmic transformations of the raw data and the
+use of weighted instead of arithmetic averages.
+
+As for the computation of these measures, we implemented the formulas of section
+\textbf{5.2} for every TMS response using the Julia programming language.
+
+
+\subsection{Definitions: Pulse specific relative amplitudes}
+
+For simplicity, we deal with the hypothetical situation in which a single ISI is
+used for paired stimulations in a unique TMS session. Our formulations
+generalize easily to different inter-stimulus intervals and multiple
+experimental sessions.
+
+Firstly, we need to establish some convenient notation. Let $n$ and $m$ be the
+number of paired and test pulses elicited to the subject in the session,
+respectively. Let $\textbf{x}$, $\textbf{t}$ be vectors over the $\mathbb{R}^+$
+vector space whose components are the evoked potentials of paired and pulse
+stimulations, respectively.
+
+
+\begin{definition} 
+
+
+    Let $x \in \textbf{x}$ be the evoked potential of a single paired
+    stimulation. Then we define two pulse-specific relative amplitude measures,
+
+    \begin{equation} 
+        \rho(x) := \frac{mx}{\sum_{i=1}^mt_j}
+    \end{equation}
+
+    \begin{equation} 
+        \delta(x) := \frac{x}{m}\sum_{j=1}^m\frac{1}{t_j} 
+    \end{equation}
+\end{definition}
+
+\begin{remark} 
+    $\forall x: x \in \mathbb{R}^+:\delta(x) \geq \rho(x)$. (For a proof of this
+    property, consult the appendix.) 
+\end{remark}
+
+Notice that $\rho(x)$ is the proportion between the potential $x$, evoked by a
+paired stimulation, with respect to the average potential of single test
+stimulations. On the other hand, $\delta(x)$ is the average proportion of $x$
+with respect to each single test pulse. 
+
+To put it differently, $\rho$ is a representation of the relative importance of
+each double pulse in relation to the overall distribution of the test pulses in
+the subject. It measures the deviation of the double pulse $x$ with respect to
+the average test pulse. $\delta$, in contrast, measures the proportionality of a
+double pulse with respect to different values in the distribution of the test
+pulses of the subject.
+
+Notice as well that $\rho$ and $\delta$ are defined over the evoked potentials
+of a specific experimental session. In other words, whenever we speak of the
+$\delta$ and $\rho$ \textit{features} (\textit{id est}, of the data resulting
+from broadcasting $\rho$ and $\delta$ over a collection of evoked potentials),
+such features are understood to be subject- and session-specific.
+
+
+\section{Results}
+
+\subsection{Random forest without MRA}
+
+When trained on the raw data ---that is, without the inclusion of pulse-specific
+MRA--- the model's accuracy was of $\approx34.2 \%$. However, the confusion
+matrix of the model, \textbf{Figure 3}, shows the errors are concentrated on the healthy control
+categories, while categorization of diagnosed subjects was substantially better.
+This implies major depressive subjects show statistically significant and
+distinct patterns in their TMS responses in comparison to healthy controls, and
+may be considered evidence for depression-induced differences in
+neuroplasticity.
+
+However, it is important to note that the proxy for neuroplasticity in the
+double pulse paradigm is precisely the relative amplitude of double pulses with
+respect to test pulses. The raw data lacks any measure of relative amplitude.
+Besides, regardless of the fact that the model above suggests a critical
+difference in the response patterns between subject groups, its accuracy is
+still poor.
+
+\subsection{Random forest with MRA}
+
+We then trained the model first with the aggregation of the $\rho$ feature, then
+with the aggregation of the $\delta$ feature, and then with the aggregation of
+both.
+
+With the inclusion of the $\rho$ feature increased accuracy by a factor of
+$\approx 2.1$ to $72.6\%$. The inclusion of the $\delta$ feature had a similar
+impact, increasing accuracy to $73.4\%$.
+
+\begin{figure}[H]
+  \centering
+  \subfigure[Raw data]{\includegraphics[width=0.48\textwidth]{cm-raw}}
+  \hfill
+  \subfigure[$\rho$ and $\delta$ features included.]{\includegraphics[width=0.48\textwidth]{cm-rho-delta}}
+  \caption{Compared performance: raw data and data with measures of relative
+  amplitude.}
+  \label{fig:two_images}
+\end{figure}
+
+
+
+The inclusion of both the $\delta$ and $\rho$ features computed over the
+logarithmically transformed EMG peak-to-peak improved the model's accuracy.
+Concretely, accuracy was increased to $86\%$, with the following confusion
+matrix.
+
+\subsection{Random forest after $\ln$ transforms and weighted averages}
+
+Since the neural response to transcranial stimulations follows an exponential
+distribution (see \textbf{Cite section}), we experimented with the inclusion of
+the features above applied to the logarithmically transformed peak-to-peak EMG.
+
+As stated earlier, action potentials evoked by transcranial magnetic
+stimulations follow a Gamma distribution that is very close to the exponential.
+(see \textbf{Statistics} section). Experimentation has shown that the inclusion
+of weighted variants of the features defined above greatly improves the
+performance of a random forest model (see \textbf{Empirical results}).
+
+The use of weighted instead of arithmetic averages may be useful in dealing with
+the excessive influence of outliers or highly spread out points in the feature.
+For example, the weight vectors may be computed using the MAD or the
+inverse-variance of each $x$. 
+
+
+As stated in section \textbf{3}, we experimented with using weighted
+versions of our pulse-specific MRA. They consisted in weighting test pulses
+with some appropriate weight vector. For example, including $\rho$ and
+$\delta$ using inverse-variance weights, we obtained an accuracy of
+$90.2\%$, with the following confusion matrix.
+
+\begin{figure*}
+    \centering
+    \includegraphics[scale=0.4]{final-cm}
+    \caption{Confusion matrix: $\rho(x)$, $\delta(x), \rho(\ln x), \delta(\ln
+    x)$, $\rho_w(x)$ and $\delta_w$(x).}
+    \label{fig:figure5}
+\end{figure*}
 
 \section{Discussion}
 
-The previous results show that the inclusion of pulse-specific relative
-amplitude measures greatly improve the accuracy of a random forests model
-trained over TMS data for subject classification. More importantly, it becomes
-clear that, via the engineered features $\delta$ and $\rho$, researchers can
-attain evidence in favour or against hypotheses pertaining to differences among
-subject groups. Particularly, in showing that pulse-specific measures of
-relative amplitude are significant information to determine the sleep session
-and group of a subject, and being relative amplitude measures a proxy for
-neuroplasticity, the previous model provides evidence in favour of
-sleep-modulated, depression-induced differences in neuroplasticity.
+The results in \textbf{Section 6} demonstrate that pulse-specific MRA greatly
+improve the accuracy of a random forest model trained over TMS data for subject
+classification. More importantly, it becomes clear that, by using the engineered
+features $\delta$ and $\rho$, researchers can attain evidence in favour or
+against hypotheses pertaining to differences among subject groups. Particularly,
+the model provides otherwise unattainable evidence in favour of sleep-modulated,
+depression-induced differences in neuroplasticity.
 
-The use of machine learning models over neuroscientific observations is not only
-a promising tool in the production of evidence. There is a diagnostic potential
-that is still to be evaluated. Indeed, if machine learning models can detect the
-neural patterns that distinguish, under specific experimental conditions,
-healthy control from diagnosed subjects, such models can potentially be
-implemented in the diagnosis process as powerful clinical tool. 
+\section{Conclusion}
+
+This paper shows that pulse-specific relative amplitude measures allow for the
+use of making machine learning models over TMS experimental data. Such models
+can play an important part in future research by introducing new ways of
+both analyzing and extracting meaningful insights from TMS results.
+
+The use of machine learning models in neuroscientific observations is not only a
+promising tool in the production of evidence. There is a diagnostic potential
+that is yet to be evaluated. By detecting distinct neural patterns between
+healthy control and diagnosed subjects,\footnote{At least under specific
+experimental conditions.} these models can potentially serve as a useful tool in
+the diagnostic process.
 
 Although long and serious scientific effort is still required to appraise the
-diagnostic potential of machine learning models, we believe our results allow
-for a certain amount of conservative optimism on the matter.
+diagnostic potential of these technologies, we believe our results allow
+for cautious optimism on the matter.
 
-In short, pulse-specific relative amplitude features are successful in making
-machine learning models applicable to TMS experimental data. Thus, they can play
-an important part in future research by allowing for new ways of analyzing and
-extracting meaningful information of TMS results.
+It should however be noted that, although machine learning models reveal
+distinct response patterns and differences across subjects, they do not disclose
+the neurobiology modulating those differences nor what those patterns are. 
 
-\section{Appendix 1}
+Lastly, the impact of pulse-specific MRA in data-driven models other than random forests
+is yet to be tested. These empirical trials are not trivial because failure or
+success of the models is dependent not only on the engineered features, but on
+the nature of the experimental data itself. 
 
 
-
-\section{Appendix 2}
+\section{Appendix}
 
 \textbf{Proof 1}. In \textbf{Remark 1}, we observed the following property:
 
