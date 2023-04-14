@@ -19,6 +19,11 @@
 \newtheorem{wrnote}{Writing note}
 \newtheorem{proof}{Proof}
 
+\title{\textbf{Modelling Neuroplasticity: Using Machine Learning to Learn About TMS Data}}
+\author{Santiago López Pereyra, Jennifer Goldschmied, Coauthor 3,
+Coauthor 4, \ldots}
+\maketitle
+
 \begin{document} 
 
 \begin{multicols}{2}
@@ -142,7 +147,8 @@ of the resulting database are:
 
 The distribution of the evoked potentials was always exponential. However, the
 $\beta$ parameter of the distribution varies across subject groups and session
-types, as shown in Figures \ref{fig:figure1} and \ref{fig:figure2}.
+types, as shown in Figures \ref{fig:figure1} and \ref{fig:figure2} and in the
+table below:
 
 ~
 
@@ -153,7 +159,7 @@ types, as shown in Figures \ref{fig:figure1} and \ref{fig:figure2}.
     HC BL & 196.77 & 149.36 \\
     \hline
     HC SWD & 165.98 & 99.76 \\
-    \hline \\ 
+    \hline 
     MDD BL & 187.56 & 127.69\\ 
     \hline 
     MDD SWD & 247.57 & 151.07 \\
@@ -162,8 +168,9 @@ types, as shown in Figures \ref{fig:figure1} and \ref{fig:figure2}.
 
 ~ 
 
-Each of the means in the above table corresponds to the estimated $\beta$
-parameter of the distribution of the paired pulses on each subject group.
+Observe that each of the means in the above table corresponds to the estimated
+$\beta$ parameter of the distribution of the paired pulses on each subject
+group.
 
 \begin{figure*}
   \begin{minipage}[b]{0.48\linewidth}
@@ -241,11 +248,19 @@ of a ML classification model and in what degree.\footnote{We use a
 classification model for practical reasons ---namely, because the samples in our
 data were conveniently labeled by subject group and sleep session.} Our case
 study is a random forest model in Python tasked with classifying every
-observation with the appropriate subject label. In other words, its goal is to
-infer, based on the properties of each TMS response, the group of the subject
-upon which the stimulation was elicited, as well as the type of sleep session
-after which it occurred. Our hypothesis is that pulse-specific measures of relative
-amplitude will significantly improve a random forest's performance.
+observation with the appropriate subject label. The model we use is an AdaBoost
+classifier consisting of 20 decision trees. Every tree in the ensemble has a
+maximum depth of $8$. The boosting algorithm is \textit{SAMME.R}. The learning
+rate is set to $\eta = 0.01$. We use holdout cross-validation to evaluate the
+performance of the model. The total number of values in our dataset is $n =
+9382$.
+
+The goal of the classifier is to infer, based on the properties of each TMS
+response, the group of the subject upon which the stimulation was elicited, as
+well as the type of sleep session after which it occurred. Our hypothesis is
+that pulse-specific measures of relative amplitude will significantly improve
+the model's performance.
+
 
 Section \textbf{5} provides the mathematical definitions of our measures of
 relative amplitude. Section \textbf{6} discusses the impact of each measure on
@@ -259,6 +274,7 @@ use of weighted instead of arithmetic averages.
 
 As for the computation of these measures, we implemented the formulas of section
 \textbf{5.2} for every TMS response using the Julia programming language.
+
 
 
 \subsection{Definitions: Pulse specific relative amplitudes}
@@ -318,31 +334,30 @@ such features are understood to be subject- and session-specific.
 
 \subsection{Random forest without MRA}
 
-When trained on the raw data ---that is, without the inclusion of pulse-specific
-MRA--- the model's accuracy was of $\approx34.2 \%$. However, the confusion
-matrix of the model, \textbf{Figure 3}, shows the errors are concentrated on the healthy control
-categories, while categorization of diagnosed subjects was substantially better.
-This implies major depressive subjects show statistically significant and
-distinct patterns in their TMS responses in comparison to healthy controls, and
-may be considered evidence for depression-induced differences in
-neuroplasticity.
+The first random forest model is our control group. We trained it on the raw
+data ---that is, without the inclusion of pulse-specific MRA. The model's
+accuracy on the testing set was of $\approx34.2 \%$. The confusion matrix of the
+model, \textbf{Figure 3.}\textit{a}, shows that errors concentrated towards
+healthy control categories. Additionally, the categorization of diagnosed
+subjects was poor, although substantially better than that of healthy controls. 
 
-However, it is important to note that the proxy for neuroplasticity in the
-double pulse paradigm is precisely the relative amplitude of double pulses with
-respect to test pulses. The raw data lacks any measure of relative amplitude.
-Besides, regardless of the fact that the model above suggests a critical
-difference in the response patterns between subject groups, its accuracy is
-still poor.
+Although the model almost never confuses an MDD subject with a healthy control,
+this does not necessarily imply that the model is capturing key differences
+between these groups. On the contrary, this is more likely a consequence of the
+model's bias in favour of the MDD categories. This bias is probably caused by
+the fact that the dataset has more MDD subjects than healthy controls. In
+consequence, the model learns the rudimentary strategy of always guessing for
+one of the MDD categories.
 
 \subsection{Random forest with MRA}
 
-We then trained the model first with the aggregation of the $\rho$ feature, then
-with the aggregation of the $\delta$ feature, and then with the aggregation of
-both.
-
-With the inclusion of the $\rho$ feature increased accuracy by a factor of
-$\approx 2.1$ to $72.6\%$. The inclusion of the $\delta$ feature had a similar
-impact, increasing accuracy to $73.4\%$.
+The following models incorporated the $\rho$ feature, then the $\delta$ feature,
+and then both, respectively. The inclusion of the $\rho$ feature increased
+accuracy by a factor of $\approx 2.1$ to $72.6\%$. Subsequently, the inclusion
+of the $\delta$ feature had a similar impact, increasing accuracy to $73.4\%$.
+Lastly, the inclusion of both the $\delta$ and $\rho$ features improved accuracy
+to $\approx 87.1\%$. The confusion matrix of the model trained with both $\rho$
+and $\delta$ can be observed in \textbf{Figure 3.}\textit{b}.
 
 \begin{figure}[H]
   \centering
@@ -355,48 +370,34 @@ impact, increasing accuracy to $73.4\%$.
 \end{figure}
 
 
-
-The inclusion of both the $\delta$ and $\rho$ features computed over the
-logarithmically transformed EMG peak-to-peak improved the model's accuracy.
-Concretely, accuracy was increased to $86\%$, with the following confusion
-matrix.
-
-\subsection{Random forest after $\ln$ transforms and weighted averages}
+\subsection{Random forest with additional features}
 
 Since the neural response to transcranial stimulations follows an exponential
-distribution (see \textbf{Cite section}), we experimented with the inclusion of
-the features above applied to the logarithmically transformed peak-to-peak EMG.
+distribution (see Figures 1 and 2), we tested the $\rho$ and $\delta$ functions
+over the logarithmically transformed peak-to-peak EMG. This had a negligible
+positive impact in the overall performance.
 
-As stated earlier, action potentials evoked by transcranial magnetic
-stimulations follow a Gamma distribution that is very close to the exponential.
-(see \textbf{Statistics} section). Experimentation has shown that the inclusion
-of weighted variants of the features defined above greatly improves the
-performance of a random forest model (see \textbf{Empirical results}).
+On the contrary, the inclusion of weighted variants of the features defined
+above greatly improves the performance of the model. The use of weighted instead
+of arithmetic averages in the formulas for $\delta$ and $\rho$ is useful in
+dealing with the excessive influence of outliers or highly spread out points in
+the feature. For example, the weight vectors may be computed using the MAD or
+the inverse-variance of each $x$. 
 
-The use of weighted instead of arithmetic averages may be useful in dealing with
-the excessive influence of outliers or highly spread out points in the feature.
-For example, the weight vectors may be computed using the MAD or the
-inverse-variance of each $x$. 
+For example, using inverse-variance weights accuracy increased to $\approx
+90.2\%$. The confusion matrix of this last model can be appreciated in
+\textbf{Figure 4}.
 
-
-As stated in section \textbf{3}, we experimented with using weighted
-versions of our pulse-specific MRA. They consisted in weighting test pulses
-with some appropriate weight vector. For example, including $\rho$ and
-$\delta$ using inverse-variance weights, we obtained an accuracy of
-$90.2\%$, with the following confusion matrix.
-
-\begin{figure*}
+\begin{figure}[H]
     \centering
-    \includegraphics[scale=0.4]{final-cm}
-    \caption{Confusion matrix: $\rho(x)$, $\delta(x), \rho(\ln x), \delta(\ln
-    x)$, $\rho_w(x)$ and $\delta_w$(x).}
-    \label{fig:figure5}
-\end{figure*}
+    \subfigure[$\rho, \delta, \rho(\ln x), \delta(\ln x), \rho_w$ and $\delta_w$
+    included.]{\includegraphics[width=0.48\textwidth]{final-cm}}
+    \caption{Confusion matrix}
+    \label{fig:figure4}
+\end{figure}
 
-\section{Discussion}
-
-The results in \textbf{Section 6} demonstrate that pulse-specific MRA greatly
-improve the accuracy of a random forest model trained over TMS data for subject
+In summary, our results demonstrate that pulse-specific MRA greatly improve the
+accuracy of a random forest model trained over TMS data for subject
 classification. More importantly, it becomes clear that, by using the engineered
 features $\delta$ and $\rho$, researchers can attain evidence in favour or
 against hypotheses pertaining to differences among subject groups. Particularly,
@@ -406,9 +407,9 @@ depression-induced differences in neuroplasticity.
 \section{Conclusion}
 
 This paper shows that pulse-specific relative amplitude measures allow for the
-use of making machine learning models over TMS experimental data. Such models
-can play an important part in future research by introducing new ways of
-both analyzing and extracting meaningful insights from TMS results.
+use of machine learning models over TMS experimental data. Such models
+can play an important part in TMS research by introducing new ways of
+both analyzing and extracting meaningful insights from the experimental results.
 
 The use of machine learning models in neuroscientific observations is not only a
 promising tool in the production of evidence. There is a diagnostic potential
@@ -430,6 +431,24 @@ is yet to be tested. These empirical trials are not trivial because failure or
 success of the models is dependent not only on the engineered features, but on
 the nature of the experimental data itself. 
 
+\end{multicols}
+
+\section{References}
+
+\begin{enumerate}
+    \item Lefaucheur, JP. “Transcranial Magnetic Stimulation.” Handbook of clinical neurology. U.S. National Library of Medicine. Accessed April 14, 2023. https://pubmed.ncbi.nlm.nih.gov/31277876. 
+    \item Orth, M, AH Snijders, and JC Rothwell. “The Variability of Intracortical Inhibition and Facilitation.” Clinical neurophysiology : official journal of the International Federation of Clinical Neurophysiology. U.S. National Library of Medicine. Accessed April 14, 2023. https://pubmed.ncbi.nlm.nih.gov/14652096/. 
+    \item Rossini, PM, D Burke, LG Cohen, Z Daskalakis, R Di Iorio, V Di Lazzaro, F Ferreri, et al. “Non-Invasive Electrical and Magnetic Stimulation of the Brain, Spinal Cord, Roots and Peripheral Nerves: Basic Principles and Procedures for Routine Clinical and Research Application. an Updated Report from an I.F.C.N. Committee.” Clinical neurophysiology : official journal of the International Federation of Clinical Neurophysiology. U.S. National Library of Medicine. Accessed April 14, 2023. https://pubmed.ncbi.nlm.nih.gov/25797650/. 
+        \item Wassermann, EM. “Variation in the Response to Transcranial
+            Magnetic Brain Stimulation in the General Population.” Clinical
+            neurophysiology : official journal of the International Federation
+            of Clinical Neurophysiology. U.S. National Library of Medicine.
+            Accessed April 14, 2023. \newline https://pubmed.ncbi.nlm.nih.gov/12088713/. 
+\end{enumerate}
+
+\pagebreak
+
+\begin{multicols}{2}
 
 \section{Appendix}
 

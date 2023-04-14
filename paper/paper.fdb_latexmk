@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1681500284 "paper.tex" "paper.pdf" "paper" 1681500284
+["pdflatex"] 1681510246 "paper.tex" "paper.pdf" "paper" 1681510246
   "/etc/texmf/web2c/texmf.cnf" 1673996179 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -22,6 +22,7 @@
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmex10.tfm" 1136768653 992 662f679a0b3d2d53c1b94050fdaa3f50 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmmi10.tfm" 1136768653 1528 abec98dbc43e172678c11b3b9031252a ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr12.tfm" 1136768653 1288 655e228510b4c2a1abe905c368440826 ""
+  "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr17.tfm" 1136768653 1292 296a67155bdbfc32aa9c636f21e91433 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr6.tfm" 1136768653 1300 b62933e007d01cfd073f79b963c01526 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr8.tfm" 1136768653 1292 21c1c5bfeaebccffdb478fd231a0997d ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm" 1136768653 1124 6c73e740cf17375f03eec0ee63599741 ""
@@ -94,8 +95,8 @@
   "images//cm-raw.png" 1681415985 74075 4e580ab9efd4b35c138b469de4b8a044 ""
   "images//cm-rho-delta.png" 1681499081 67554 c2e06a1c6f2086d5a9d532679a1e5e65 ""
   "images//final-cm.png" 1681499147 67158 3485037970cd1d9a5e02f28b0cd194f6 ""
-  "paper.aux" 1681500273 2215 f7e7cd7ccabc70d9bf93464b86b02b47 "pdflatex"
-  "paper.tex" 1681500283 21332 272a7988b6ae77b6101dbfe48f27d07f ""
+  "paper.aux" 1681510231 2773 7a3617e36b3ee49154bb80d09465b4a3 "pdflatex"
+  "paper.tex" 1681510245 23047 929c420a407c65b7ecab881bf1112dcb ""
   (generated)
   "paper.aux"
   "paper.log"
