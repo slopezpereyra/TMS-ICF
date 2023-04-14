@@ -1,7 +1,9 @@
 using DataFrames
 using CSV
 using Statistics
-include("math.jl")
+using Plots
+using StatsPlots
+include("jl/math.jl")
 
 function sra(pulses, subject, session)
     """Computes standard relative amplitude given
@@ -32,3 +34,24 @@ function group_analysis(an, col=:SRA)
     an = combine(an, [col] => x -> mean(x))
     rename!(an, 3 => :SRA)
 end
+
+df = CSV.read("LnDF.csv", DataFrame)
+display(df)    
+
+s_df = subject_analysis(df)
+display(s_df)
+g_df = group_analysis(s_df)
+display(df)
+
+
+set_ρ(df)
+set_ρ_ln(df)
+set_ρ₂(df)
+set_ρ₂_ln(df)
+df = compute_inverse_variance_weights(df)
+set_weighted_ρ()
+set_weighted_ρ₂()
+
+display(df)
+
+CSV.write("full_df.csv", df)

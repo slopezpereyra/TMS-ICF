@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Debian) (preloaded format=pdflatex 2023.1.17)  27 FEB 2023 15:33
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Debian) (preloaded format=pdflatex 2023.1.17)  13 APR 2023 20:47
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**notes.tex
-(./notes.tex
+**paper.tex
+(./paper.tex
 LaTeX2e <2022-06-01> patch level 5
 L3 programming layer <2022-07-15> (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
@@ -86,6 +86,22 @@ LaTeX Info: Redefining \Relbar on input line 971.
 \mathdisplay@stack=\toks20
 LaTeX Info: Redefining \[ on input line 2953.
 LaTeX Info: Redefining \] on input line 2954.
+) (/usr/share/texlive/texmf-dist/tex/latex/ragged2e/ragged2e.sty
+Package: ragged2e 2021/12/15 v3.1 ragged2e Package
+\CenteringLeftskip=\skip52
+\RaggedLeftLeftskip=\skip53
+\RaggedRightLeftskip=\skip54
+\CenteringRightskip=\skip55
+\RaggedLeftRightskip=\skip56
+\RaggedRightRightskip=\skip57
+\CenteringParfillskip=\skip58
+\RaggedLeftParfillskip=\skip59
+\RaggedRightParfillskip=\skip60
+\JustifyingParfillskip=\skip61
+\CenteringParindent=\skip62
+\RaggedLeftParindent=\skip63
+\RaggedRightParindent=\skip64
+\JustifyingParindent=\skip65
 ) (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty
@@ -291,8 +307,8 @@ Package: multicol 2021/11/30 v1.9d multicolumn formatting (FMi)
 \page@free=\dimen158
 \premulticols=\dimen159
 \postmulticols=\dimen160
-\multicolsep=\skip52
-\multicolbaselineskip=\skip53
+\multicolsep=\skip66
+\multicolbaselineskip=\skip67
 \partial@page=\box54
 \last@line=\box55
 \maxbalancingoverflow=\dimen161
@@ -365,46 +381,51 @@ Package: iftex 2022/02/03 v1.0f TeX engine tests
 \Gm@layoutvoffset=\dimen172
 \Gm@dimlist=\toks24
 )
-LaTeX Font Info:    Redeclaring symbol font `letters' on input line 11.
+LaTeX Font Info:    Redeclaring symbol font `letters' on input line 13.
 LaTeX Font Info:    Overwriting symbol font `letters' in version `normal'
-(Font)                  OML/cmm/m/it --> OML/ztmcm/m/it on input line 11.
+(Font)                  OML/cmm/m/it --> OML/ztmcm/m/it on input line 13.
 LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
-(Font)                  OML/cmm/b/it --> OML/ztmcm/m/it on input line 11.
+(Font)                  OML/cmm/b/it --> OML/ztmcm/m/it on input line 13.
+\c@definition=\count284
+\c@remark=\count285
+\c@theorem=\count286
+\c@wrnote=\count287
+\c@proof=\count288
  (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2022-07-01 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count284
+\l__color_backend_stack_int=\count289
 \l__pdf_internal_box=\box98
-) (./notes.aux)
-\openout1 = `notes.aux'.
+) (./paper.aux)
+\openout1 = `paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for pmboxdraw/pmboxdraw/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for pmboxdraw/pmboxdraw/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
  (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count285
+\scratchcounter=\count290
 \scratchdimen=\dimen173
 \scratchbox=\box99
-\nofMPsegments=\count286
-\nofMParguments=\count287
+\nofMPsegments=\count291
+\nofMParguments=\count292
 \everyMPshowfont=\toks25
-\MPscratchCnt=\count288
+\MPscratchCnt=\count293
 \MPscratchDim=\dimen174
-\MPnumerator=\count289
-\makeMPintoPDFobject=\count290
+\MPnumerator=\count294
+\makeMPintoPDFobject=\count295
 \everyMPtoPDFconversion=\toks26
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -446,63 +467,143 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-\c@definition=\count291
-\c@remark=\count292
-LaTeX Font Info:    Trying to load font information for OML+ztmcm on input line 71.
+LaTeX Font Info:    Trying to load font information for OML+ztmcm on input line 32.
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omlztmcm.fd
 File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 71.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 32.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 71.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 32.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Overfull \hbox (11.71669pt too wide) detected at line 97
-[][] \OT1/cmr/m/n/10 := []  [] [][] := []
+Underfull \hbox (badness 10000) in paragraph at lines 103--104
+[]\OT1/cmr/m/n/10 Slow-wave
  []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 107--107
+[]\OT1/cmr/m/n/10 Major de-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 107--107
+\OT1/cmr/m/n/10 pres-sive
+ []
+
+./paper.tex:108: Undefined control sequence.
+<recently read> \hli 
+                     
+l.108 \hli
+          
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2]
-Overfull \hbox (58.48628pt too wide) detected at line 281
-[]
- []
+./paper.tex:236: Misplaced alignment tab character &.
+l.236             \rho_w(x) &
+                             := \frac{xm\sum_{j=1}^m w_j}{\sum_{j=1}^m t_j w...
+I can't figure out why you would want to use a tab mark
+here. If you just want an ampersand, the remedy is
+simple: Just type `I\&' now. But if some right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+./paper.tex:240: Misplaced alignment tab character &.
+l.240         \delta_w(x) &
+                           := \frac{\frac{x}{m}\sum_{j=1}^m\frac{w_j}{t_j}}{...
+I can't figure out why you would want to use a tab mark
+here. If you just want an ampersand, the remedy is
+simple: Just type `I\&' now. But if some right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+<./images//cm-raw.png, id=16, 938.7873pt x 499.3857pt>
+File: ./images//cm-raw.png Graphic file (type png)
+<use ./images//cm-raw.png>
+Package pdftex.def Info: ./images//cm-raw.png  used on input line 285.
+(pdftex.def)             Requested size: 375.50827pt x 199.75073pt.
+[3]
+<./images//cm-rho.png, id=27, 938.7873pt x 499.3857pt>
+File: ./images//cm-rho.png Graphic file (type png)
+<use ./images//cm-rho.png>
+Package pdftex.def Info: ./images//cm-rho.png  used on input line 311.
+(pdftex.def)             Requested size: 225.31355pt x 119.85501pt.
+<./images//cm-delta.png, id=28, 938.7873pt x 499.3857pt>
+File: ./images//cm-delta.png Graphic file (type png)
+<use ./images//cm-delta.png>
+Package pdftex.def Info: ./images//cm-delta.png  used on input line 313.
+(pdftex.def)             Requested size: 225.31355pt x 119.85501pt.
+<./images//cm-dr-ln.png, id=29, 938.7873pt x 518.8986pt>
+File: ./images//cm-dr-ln.png Graphic file (type png)
+<use ./images//cm-dr-ln.png>
+Package pdftex.def Info: ./images//cm-dr-ln.png  used on input line 333.
+(pdftex.def)             Requested size: 375.50827pt x 207.55576pt.
+ [4 <./images//cm-raw.png> <./images//cm-rho.png> <./images//cm-delta.png>]
+<./images//final-cm.png, id=36, 938.7873pt x 537.6888pt>
+File: ./images//final-cm.png Graphic file (type png)
+<use ./images//final-cm.png>
+Package pdftex.def Info: ./images//final-cm.png  used on input line 348.
+(pdftex.def)             Requested size: 375.50827pt x 215.0717pt.
+
+Overfull \vbox (5.73242pt too high) has occurred while \output is active []
 
 
-./notes.tex:292: LaTeX Error: \begin{multicols} on input line 15 ended by \end{document}.
+Overfull \vbox (4.23521pt too high) has occurred while \output is active []
+
+ [5 <./images//cm-dr-ln.png> <./images//final-cm.png>]
+<./images//Paired-TestDist.png, id=42, 1628.0825pt x 981.6675pt>
+File: ./images//Paired-TestDist.png Graphic file (type png)
+<use ./images//Paired-TestDist.png>
+Package pdftex.def Info: ./images//Paired-TestDist.png  used on input line 394.
+(pdftex.def)             Requested size: 227.93pt x 137.43251pt.
+<./images//P-dist-subjects-big.png, id=43, 1695.33376pt x 989.6975pt>
+File: ./images//P-dist-subjects-big.png Graphic file (type png)
+<use ./images//P-dist-subjects-big.png>
+Package pdftex.def Info: ./images//P-dist-subjects-big.png  used on input line 396.
+(pdftex.def)             Requested size: 237.34511pt x 138.5567pt.
+ [6 <./images//Paired-TestDist.png> <./images//P-dist-subjects-big.png>]
+
+./paper.tex:492: LaTeX Error: \begin{multicols} on input line 401 ended by \end{document}.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.292                         \end{document}
-                                            
+l.492 \end{document}
+                    
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
-[3] (./notes.aux) )
+[7] (./paper.aux) )
 (\end occurred inside a group at level 2)
 
-### semi simple group (level 2) entered at line 16 (\begingroup)
-### semi simple group (level 1) entered at line 15 (\begingroup)
+### semi simple group (level 2) entered at line 402 (\begingroup)
+### semi simple group (level 1) entered at line 401 (\begingroup)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 4266 strings out of 478023
- 64933 string characters out of 5841208
- 391545 words of memory out of 5000000
- 22652 multiletter control sequences out of 15000+600000
- 490658 words of font info for 83 fonts, out of 8000000 for 9000
+ 4419 strings out of 478023
+ 68624 string characters out of 5841208
+ 388279 words of memory out of 5000000
+ 22811 multiletter control sequences out of 15000+600000
+ 481432 words of font info for 58 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,15n,62p,221b,333s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 55i,15n,62p,222b,307s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on notes.pdf (3 pages, 162333 bytes).
+Output written on paper.pdf (7 pages, 680578 bytes).
 PDF statistics:
- 85 PDF objects out of 1000 (max. 8388607)
- 51 compressed objects within 1 object stream
+ 114 PDF objects out of 1000 (max. 8388607)
+ 62 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 36 words of extra memory for PDF output out of 10000 (max. 10000000)
 

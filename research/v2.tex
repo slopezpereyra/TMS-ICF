@@ -1,6 +1,7 @@
 
 \documentclass{article}
 \usepackage{amsmath}
+\usepackage{ragged2e}
 \usepackage{amssymb}
 \usepackage[utf8]{inputenc}
 \usepackage{pmboxdraw}
@@ -11,6 +12,8 @@
 \usepackage[a4paper, total={6.5in, 8.5in}]{geometry}
 \DeclareSymbolFont{letters}{OML}{ztmcm}{m}{it}
 \newtheorem{theorem}{Theorem}
+\newtheorem{wrnote}{Writing note}
+\newtheorem{proof}{Proof}
 
 \begin{document} 
 
@@ -97,21 +100,6 @@ t_{12}& \ldots & t_{1k} \\ t_{21} & t_{22}& \cdots & t_{2k} \\
       \vdots & \vdots &\ddots& \vdots \\ t_{m1} & t_{m2}& \cdots & t_{mk}
 \end{bmatrix} \end{equation*} \end{definition}
 
-\begin{definition} 
-    Let $\mu_t := \begin{bmatrix} \mu_1 & \mu_2 & \ldots & \mu_k
-    \end{bmatrix}^\top$ be such that $\mu_i$ is the average test potential for
-    the $i$th subject. In other words,
-
-\begin{equation} 
-    \mu_i = \frac{1}{m}\sum_{j=1}^m t_{ji}
-\end{equation} \end{definition}
-
-\begin{remark} 
-    Evoked potentials of both paired and test pulses conform to a Gamma
-    distribution, as discussed in the appendix (?). This means it is always an
-    implicit assumption that $\langle\forall x, t : x \in \textbf{P}, t\in \textbf{T}
-    : x, t \in \mathbb{R}^+\rangle$. 
-\end{remark}
 
 \subsection{The $\rho$ and $\delta$ features}
 
@@ -142,17 +130,35 @@ average potential of single test stimulations. On the other
 hand, $\delta(x)$ is the average proportion of $x$ with respect
 to each single test pulse.
 
+Each feature improves the performance of a random forests model in a similar
+degree, as will be shown later. This corroborates that both capture different
+but complementary information ---as it is intended in their formulations. In
+particular, $\rho$ can be a useful representation of the relative importance of
+each double pulse in relation to the overall distribution of the test pulses in
+the subject. It measures the deviation of the double pulse $x$ with respect to
+the average test pulse. On the other hand, $\delta$ is a measure of the
+proportionality of a double pulse with respect to different values in the
+(certainly exponential) distribution of the test pulses in the subject.
 
-The $\rho$ function is not an entirely new contribution. Traditionally, the
-group-level relative amplitude measure is conceived as the average, across all
-subjects in a group, of the average paired response divided by the average test
-response. This means that, if we let $S_i$ be the average relative amplitude of
-the $i$th subject, then $S_i$ has been traditionally defined as
+Since the neural response to transcranial stimulations follows a distribution
+$\beta$ very close to exponential (see \textbf{Statistics} section), we
+experimented with the inclusion of the features above applied to the
+logarithmically transformed MEPs. The inclusion of both $\rho(x), \rho(\ln(x))$
+for every $x$ improves the performance of a random forest model significantly,
+and the same occurs for $\delta$, as can be seen in the \textbf{Empirical
+results} section.
 
-\begin{equation} 
+It must be said that the $\rho$ function is not an entirely new contribution.
+Traditionally, the group-level relative amplitude measure is conceived as the
+average, across all subjects in a group, of the average paired response divided
+by the average test response. This means that, if we let $S_i$ be the average
+relative amplitude of the $i$th subject, then $S_i$ has been traditionally
+defined as
+
+\begin{equation*} 
     S_i=\frac{\frac{1}{n}\sum_{j=1}^n x_{ji}}{\frac{1}{m}\sum_{j=1}^m t_{ji}} = 
     \frac{\rho(x_{1i})+\cdots + \rho(x_{ni})}{n} 
-\end{equation}
+\end{equation*}
 
 as it is easy to see from decomposing the sum in the
 numerator. In other words, the traditionally used measure of
@@ -161,32 +167,35 @@ the average $\rho$ in a subject, albeit it was never defined explicitly.
 
 \subsection{The weighted variants $\rho_w, \delta_w$}
 
-As stated earlier, action potentials evoked by transcranial
-magnetic stimulations follow a Gamma distribution; one that
-closely resembles an exponential distribution (see
-\textbf{Statistics} section). A valid form of data
-augmentation that also attempts to deal with the presence of
-outliers is to weight the averages involved in $\rho,
-\delta$ using inverse-variance weights. The attempt is to
-allow for potentials that lay at the tail of the
-distribution to contribute in a way proportional to their
-probability. 
+As stated earlier, action potentials evoked by transcranial magnetic
+stimulations follow a Gamma distribution that is very close to the exponential.
+(see \textbf{Statistics} section). Experimentation has shown that the inclusion
+of weighted variants of the features defined above greatly improves the
+performance of a random forests model (see \textbf{Empirical results}).
 
-If we let $\rho_w, \delta_w$ be the weighted versions of
-$\rho, \delta$, then we have 
+The use of weighted instead of arithmetic averages may be useful in dealing with
+the excessive influence of outliers or highly spread out points in the feature.
+For example, the weight vectors may be computed using the MAD or the
+inverse-variance of each $x$. 
 
-        \begin{align} \rho_w(x) &:= \frac{xm\sum_{j=1}^m
-        w_j}{\sum_{j=1}^m t_j w_j} \\ \delta_w(x) &:=
-    \frac{\frac{x}{m}\sum_{j=1}^m\frac{w_j}{t_j}}{\sum_{j=1}^m
-w_j} \end{align}
+In our \textbf{Empirical results}, we show the influence of including
+inverse-variance variance weights to the model. But the general formulation of
+these alternative features, for any desired weight vector, is
 
-where $\textbf{w}$ is some appropriate weight vector. Since
-the purpose of $\textbf{w}$ is to reduce the contribution of
-outliers to the overall measure of relative amplitude, it is
-to be expected that the distribution of $\textbf{w}$ closely
-resembles that of evoked potentials.
+\begin{align} 
+    \rho_w(x) &:= \frac{xm\sum_{j=1}^m w_j}{\sum_{j=1}^m t_j w_j} \\ 
+    \delta_w(x) &:= \frac{\frac{x}{m}\sum_{j=1}^m\frac{w_j}{t_j}}{\sum_{j=1}^mw_j} 
+\end{align}
 
-\section{Empirical results}
+where $\textbf{w}$ is some appropriate weight vector.
+
+\section{Statistics}
+
+\begin{wrnote}
+    The description of the experimental process in this section is poor. Also I
+    do not know the total number of subjects, experiments are still being
+    conducted. Need input from the lab on these matters.
+\end{wrnote}
 
 We used data collected across $N = ?$ subjects at the \textit{Laboratory for the
 Study of Slow-wave sleep activity}, University of Pennsylvania, with $H = ?$
@@ -194,40 +203,234 @@ healthy controls and $D = ?$ diagnosed with major depressive disorder (MDD).
 Transcranial magnetic stimulation of the motor cortex was elicited to them after
 a night of baseline sleep and after a night of slow-wave disruption (SWD) sleep.
 Motor evoked potentials were measured via an electrode (?) placed on the
-subjects' thumb. In the slow-wave disruption session, an auditory stimulus with
+subjects' thumb (?). In the slow-wave disruption session, an auditory stimulus with
 sufficient strength to interrupt the normal occurrence of slow-wave sleep, yet
 not strong enough to wake the subjects, was elicited. This experimental setting
 produces four distinct categories, two depending on the subject group and two on
-the type of sleep session underwent.
+the type of sleep session underwent, as shown in the table below.
 
-We trained the exact same random forests model first on the data without
-pulse-specific measures of relative amplitude, then on the data including some
-or all the pulse-specific measures of relative amplitude. The model's task was
-to classifiy each TMS stimulation into one of the four experimental categories.
-In other words, it faced the challenge of establishing to which type of subject,
-and under which type of session, each stimulation was elicited, based only on
-the evoked potential, the ISI and ---later--- the relative amplitude measures of
-the stimulation. Our objective was to evaluate whether the inclusion of
-pulse-specific measures of relative amplitude improved the model's accuracy, and
-if so in what degree. 
+~
+
+\begin{tabular}{ |p{2cm}|p{2cm}|p{2cm}|  }
+\hline
+& Baseline & Slow-wave disruption \\
+\hline
+Healthy control & HC BL & HC SWD \\
+\hline
+Major depressive disorder & MDD BL & MDD SWD \\
+\hline
+\end{tabular}
+
+~
+
+
+In our statistical analyses, we have contemplated test and paired pulses
+separately, since they are different type of stimulations. We have found the
+peak-to-peak EMG to follow an exponential distribution in both test and paired
+pulses. This is true when taking different inter-stimulus intervals in
+consideration as well as when observing the distribution of distinctly spaced
+paired pulses. 
+
+Although distributions were always exponential, the $\beta$ parameter of said
+distributions varied across subject groups and session types. 
+
+~
+
+    \begin{tabular}{ |p{2cm}|p{2cm}|p{2cm}|  }
+    \hline
+    &       Mean & Median \\
+    \hline
+    HC BL & 196.77 & 149.36 \\
+    \hline
+    HC SWD & 165.98 & 99.76 \\
+    \hline \\ 
+    MDD BL & 187.56 & 127.69\\ 
+    \hline 
+    MDD SWD & 247.57 & 151.07 \\
+    \hline
+    \end{tabular}
+
+~ 
+
+Each of the means in the above table correspond to the estimated $\beta$
+parameter of the distribution of the paired pulses on each subject group.
+
+\end{multicols}
+\raggedright
+
+~
+
+\includegraphics[scale=0.14]{Paired-TestDist}
+\raggedright
+\includegraphics[scale=0.14]{P-dist-subjects-big}
+
+
+
+\justifying
+\begin{multicols}{2}
+
+Each observation in the data we used was a specific experimental observation
+resulting of an individual transcranial stimulation. The original features of the data
+were: 
+
+\begin{enumerate}
+    \item An $EMG$ variable with the EMG peak-to-peak of each observation.
+    \item A $Label$ categorical feature, which encoded the group of
+        the subject of each observation, was the target variable. 
+    \item An $ISI$ feature that econded the inter-stimulus interval of each
+        pulse. A value of $-1$ indicated that the given pulse was a test pulse (no
+        inter-stimulus interval).
+\end{enumerate}
+
+To these features, we included (separately and then together) the engineered
+features $\rho$ and $\delta$, which were computed for each observation using the
+Julia programming language. The code used to compute the features is publicly
+available (at \ldots).
+
+\section{Empirical results}
+
+The objective was to evaluate whether the inclusion of the engineered,
+pulse-specific measures of relative amplitude improved the performance of a
+machine learning model, and in what degree. In order to do this, we set a
+random forests model with the task of classifying every observation with its
+appropriate label. In order words, the model was set out to infer, based on the
+properties of each transcranial stimulation response, the group of the subject
+upon which the stimulation was elicited, as well as the type of sleep session
+after which it occurred.
+
+We trained the model first on the data without pulse-specific
+measures of relative amplitude (this is, with only the three features listed in
+the \textbf{Statistics} section). We then trained the exact same model on the
+data with the inclusion of $\delta$ but not $\rho$, and the inclusion of $\rho$
+but not $\delta$. We then trained the same model with both engineered features,
+and lastly with both features and also their weighted variantes, using
+inverse-variance weights.
 
 
 \subsection{Raw data}
 
-When trained on the raw data, without the inclusion of
-pulse-specific relative amplitude measures, the model's
-accuracy was $A\approx34.2 \%$.
+When trained on the raw data, without the inclusion of pulse-specific relative
+amplitude measures, the model's accuracy was of $\approx34.2 \%$. However, the
+confusion of the model shows the errors are concentrated on the healthy control
+categories, while categorization of diagnosed subjects was substantially better.
+This implies major depressive subjects show statistically significant and
+distinct patterns in their TMS responses in comparison to healthy controls, and
+may be considered evidence for depression-induced differences in
+neuroplasticity.
 
-\pagebreak
+\end{multicols}
+
+\centering
+~
+
+\includegraphics[scale=0.4]{cm-raw}
+
+
+\justifying
+\begin{multicols}{2}
+
+However, it is important to note that the proxy for neuroplasticity in the
+double pulse paradigm is precisely the relative amplitude of double pulses with
+respect to test pulses. The raw data lacks any measure of relative amplitude.
+Besides, regardless of the fact that the model above suggests a critical
+difference in the response patterns between subject groups, its accuracy is
+still poor.
+
+\subsection{Engineered data}
+
+With the inclusion of the $\rho$ feature, accuracy increases by a factor of
+$\approx 2.1$ to $72.6\%$. The inclusion of the $\delta$ feature alone increased
+it, in comparison to the raw data, had a more or less equivalent impact,
+increasing accuracy to $73.4\%$.
+
+
+\end{multicols}
+\raggedright
+
+~
+
+\includegraphics[scale=0.24]{cm-rho}
+\raggedright
+\includegraphics[scale=0.24]{cm-delta}
+
+
+
+\justifying
+\begin{multicols}{2}
+
+The model still shows a higher accuracy when classifying diagnosed subjects, but
+the overall accuracy across all categories was significantly improved.
+
+As stated earlier, the inclusion of the $\delta$ and $\rho$ features computed
+over the logarithmically transformed EMG peak-to-peak improved the model's
+accuracy. Concretely, accuracy was increased to $86\%$, with the following
+confusion matrix.
+
+\end{multicols}
+
+~
+\centering
+
+\includegraphics[scale=0.4]{cm-dr-ln}
+
+
+\justifying
+\begin{multicols}{2}
+
+At last, if to the previous model we add also the weighted versions of $\delta$
+and $\rho$, using inverse-variance weights, we obtained an accuracy of $89.8\%$,
+with the following confusion matrix.
+
+\end{multicols}
+
+\centering
+~
+
+\includegraphics[scale=0.4]{final-cm}
+
+
+\justifying
+\begin{multicols}{2}
+
+\section{Discussion}
+
+The previous results show that the inclusion of pulse-specific relative
+amplitude measures greatly improve the accuracy of a random forests model
+trained over TMS data for subject classification. More importantly, it becomes
+clear that, via the engineered features $\delta$ and $\rho$, researchers can
+attain evidence in favour or against hypotheses pertaining to differences among
+subject groups. Particularly, in showing that pulse-specific measures of
+relative amplitude are significant information to determine the sleep session
+and group of a subject, and being relative amplitude measures a proxy for
+neuroplasticity, the previous model provides evidence in favour of
+sleep-modulated, depression-induced differences in neuroplasticity.
+
+The use of machine learning models over neuroscientific observations is not only
+a promising tool in the production of evidence. There is a diagnostic potential
+that is still to be evaluated. Indeed, if machine learning models can detect the
+neural patterns that distinguish, under specific experimental conditions,
+healthy control from diagnosed subjects, such models can potentially be
+implemented in the diagnosis process as powerful clinical tool. 
+
+Although long and serious scientific effort is still required to appraise the
+diagnostic potential of machine learning models, we believe our results allow
+for a certain amount of conservative optimism on the matter.
+
+In short, pulse-specific relative amplitude features are successful in making
+machine learning models applicable to TMS experimental data. Thus, they can play
+an important part in future research by allowing for new ways of analyzing and
+extracting meaningful information of TMS results.
+
 \section{Appendix}
 
-\subsection*{Proofs}
+\textbf{Proof 1}. In \textbf{Remark 1}, we observed the following property:
 
-\begin{theorem}
-    $\forall x: x \in \mathbb{R}^+ : \delta(x) \geq \rho(x)$
-\end{theorem}
+    \begin{align*}
+        \forall x: x \in \mathbb{R}^+ : \delta(x) \geq \rho(x)
+    .\end{align*}
 
-Recall that
+Such property can be proven via induction. Firstly, recall that
+
 
 \begin{align*} \delta(x) &= \frac{x}{m}\sum^m\frac{1}{t_j} \\
                 \rho(x) &= \frac{xm}{\sum^m t_j} \end{align*}
@@ -242,9 +445,7 @@ assumption that $t_i \in \mathbb{R}^+$. It is the case that
 \end{align*}
 
 This holds for $m=1$, since $\frac{1}{t_1}+t_1 \geq 1 \iff 1+t_1^2 \geq t_1$. So
-we may assume $S^k_1 S^k_2 \geq k^2$ . We may only show now that
-
-
+we may assume $S^k_1 S^k_2 \geq k^2$ . We now set out to show that
 
 \begin{equation*} 
     S^{k+1}_1 S^{k+1}_2 \geq (k+1)^2

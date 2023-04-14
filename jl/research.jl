@@ -23,9 +23,7 @@ function compute_inverse_variance_weights(df)
     to each pulse in the data."""
     t = groupby(df, [:ISI, :Label])
     df = transform(t, :EMGPeakToPeak .=> inv_var_weights => :InvVarWeights)
-end
-
-# Helper functions
+end # Helper functions
 
 function get_pulses(subject, session, isi, colname=:EMGPeakToPeak)
     """Returns some column of the data filtered by subject, session, and isi. 
@@ -87,14 +85,32 @@ end
 function set_ρ(df)
     """Sets raw, pulse-specific relative amplitude feature in the database."""
     gdf = groupby(df, [:ISI, :Subject, :Session])
+    f(x, y, z) = ρ(x, get_test_pulses(df, y, z))
     res = transform(gdf, [:EMGPeakToPeak, :Subject, :Session] => (x, y, z) -> ρ(x, get_test_pulses(df, y, z)))
     df[!, :RRA] = res[:, end]
+end
+
+function set_ρ_ln(df)
+    """Sets raw, pulse-specific relative amplitude feature in the database."""
+    gdf = groupby(df, [:ISI, :Subject, :Session])
+    f(x, y, z) = ρ(log.(x), log.(get_test_pulses(df, y, z)))
+    res = transform(gdf, [:EMGPeakToPeak, :Subject, :Session] => (x, y, z) -> f(x, y, z))
+    df[!, :LogRRA] = res[:, end]
 end
 
 
 function set_ρ₂(df)
     """Sets raw, pulse-specific relative amplitude feature in the database."""
     gdf = groupby(df, [:ISI, :Subject, :Session])
-    res = transform(gdf, [:EMGPeakToPeak, :Subject, :Session] => (x, y, z) -> ρ₂(x, get_test_pulses(df, y, z)))
+    f(x, y, z) = ρ₂(x, get_test_pulses(df, y, z))
+    res = transform(gdf, [:EMGPeakToPeak, :Subject, :Session] => (x, y, z) -> f(x, y, z))
     df[!, :RRA2] = res[:, end]
+end
+
+function set_ρ₂_ln(df)
+    """Sets raw, pulse-specific relative amplitude feature in the database."""
+    gdf = groupby(df, [:ISI, :Subject, :Session])
+    f(x, y, z) = ρ₂(log.(x), log.(get_test_pulses(df, y, z)))
+    res = transform(gdf, [:EMGPeakToPeak, :Subject, :Session] => (x, y, z) -> f(x, y, z) )
+    df[!, :LogRRA2] = res[:, end]
 end
