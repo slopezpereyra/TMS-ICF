@@ -145,7 +145,7 @@ of the resulting database are:
         inter-stimulus interval).
 \end{enumerate}
 
-The distribution of the evoked potentials was always exponential. However, the
+The distribution of the evoked potentials is always exponential. However, the
 $\beta$ parameter of the distribution varies across subject groups and session
 types, as shown in Figures \ref{fig:figure1} and \ref{fig:figure2} and in the
 table below:
@@ -279,16 +279,16 @@ As for the computation of these measures, we implemented the formulas of section
 
 \subsection{Definitions: Pulse specific relative amplitudes}
 
-For simplicity, we deal with the hypothetical situation in which a single ISI is
-used for paired stimulations in a unique TMS session. Our formulations
-generalize easily to different inter-stimulus intervals and multiple
-experimental sessions.
+For simplicity, we will first deal with the hypothetical situation in which a
+single ISI is used for paired stimulations in a unique TMS session. Our
+formulations generalize easily to different inter-stimulus intervals and
+multiple experimental sessions.
 
 Firstly, we need to establish some convenient notation. Let $n$ and $m$ be the
 number of paired and test pulses elicited to the subject in the session,
 respectively. Let $\textbf{x}$, $\textbf{t}$ be vectors over the $\mathbb{R}^+$
-vector space whose components are the evoked potentials of paired and pulse
-stimulations, respectively.
+vector space whose components are understood to be the evoked potentials of
+paired and test stimulations, respectively.
 
 
 \begin{definition} 
@@ -296,6 +296,8 @@ stimulations, respectively.
 
     Let $x \in \textbf{x}$ be the evoked potential of a single paired
     stimulation. Then we define two pulse-specific relative amplitude measures,
+    $\rho : \mathbb{R} \to \mathbb{R}, \delta : \mathbb{R} \to \mathbb{R}$,
+    where
 
     \begin{equation} 
         \rho(x) := \frac{mx}{\sum_{i=1}^mt_j}
@@ -328,6 +330,101 @@ of a specific experimental session. In other words, whenever we speak of the
 $\delta$ and $\rho$ \textit{features} (\textit{id est}, of the data resulting
 from broadcasting $\rho$ and $\delta$ over a collection of evoked potentials),
 such features are understood to be subject- and session-specific.
+
+\begin{remark}
+    Let $\pi$ denote the coefficient traditionally used for estimating the
+    relative amplitude between test and paired pulses. In accordance to what was
+    described in the second paragraph of Section $4$,
+
+    \begin{align*}
+        \pi = \frac{\mu_x}{\mu_t}
+    .\end{align*}
+
+    where $\mu_x, \mu_t$ are the mean paired and test pulse responses,
+    respectively. It follows from the definition of $\pi$ and $\rho$ that
+
+    \begin{align*}
+        \pi = \frac{\rho(x_1) + \ldots + \rho(x_n)}{n}
+    .\end{align*}
+
+    (For a proof, consult the appendix.)
+\end{remark}
+
+The second remark is of great importance. It states that the way in which
+relative amplitude was traditionally computed---the way in which neuroplasticity
+was traditionally proxied---is different from our proposed $\rho$ function only
+in terms of scale. More specifically, the traditional coefficient used to proxy
+neuroplasticity at the subject level is nothing but the mean $\rho$
+measure in an experimental session. We believe this bestows $\rho$ with a
+certain degree of confidence, insofar as not only it is not entirely new, but
+neuroscientists have implicitly used it all along.
+
+
+\subsection{Generalizing to many subjects}
+
+
+\begin{definition}
+    Let $\textbf{x} \in \mathbb{R}^j$. Then we define $T(\textbf{x}) := \begin{bmatrix} 
+        \rho(x_1) & \ldots & \rho(x_j)
+    \end{bmatrix}^\intercal $ and $R(\textbf{x}) := \begin{bmatrix} 
+        \delta(x_1) & \ldots & \delta(x_j) 
+    \end{bmatrix}^\intercal $.
+\end{definition}
+
+\begin{theorem}
+    The mappings $T, R$ are linear transformations.
+\end{theorem}
+
+Let $k \in \mathbb{N}$ denote the number of experimental subjects in an
+experiment, to each of whom $n, m$ paired and test pulses were elicited,
+respectively.
+
+\begin{definition}
+    We define $\textbf{P} \in \mathbb{R}^{k \times n}$ a
+    matrix where the $i$th row vector $\textbf{x}^{(i)}$ is the vector whose
+    components are the paired-pulse responses of the $i$th subject.
+\end{definition}
+
+\begin{definition}
+    Let $\mu^{(t)}_i$ be average test-pulse response of the $i$th subject. Then
+    we define
+    $\textbf{M}^{k \times k}$ a diagonal matrix with $\textbf{M}_{(ii)} =
+    \frac{1}{\mu^{(t)}_{i}}$.
+\end{definition}
+
+\begin{theorem}
+    The row-vectors of the matrix $\textbf{X}_\rho = \textbf{M}\textbf{P}$ are the
+    vectors $T(\textbf{x}^{(1)}), \ldots, T(\textbf{x}^{(k)})$.
+\end{theorem}
+
+Similarly, if we let $\textbf{M'}$ be a diagonal matrix such that
+$\textbf{M'}_{ii} = \mu^{(t^{-1})}_i$, where $\mu^{(t^{-1})}_i$ denotes the
+average \textit{inverse} test-pulse response of the $i$th subject, we come to
+the following result. 
+
+\begin{theorem}
+    The row-vectors of the matrix $\textbf{X}_\delta = \textbf{M'}\textbf{P}$ 
+    are the vectors $R(\textbf{x}^{(1)}), \ldots,
+    R(\textbf{x}^{(k)})$.
+\end{theorem}
+
+
+If experiments were conducted using multiple ISI, then to each ISI $r$ it
+corresponds a distinct matrix $\textbf{X}_\delta^{ISI = r},
+\textbf{X}_\rho^{ISI = r}$. The same applies to different subject groups.
+
+We have expanded $\rho, \delta$ to higher dimensions for the purpose of
+providing a theoretical framework of their application to larger data sets and
+many experimental subjects. However, it is important to note that the matrix
+representations here presented only make sense under the assumption that, on
+each subject, none of $n$ paired pulses were anomalous, and hence all can be
+safely included in the model. Such assumption rarely holds in reality, where it
+is usual to excluded some pulses due to the presence of artifacts. There are
+many ways to deal with this situation in the implementation of our model---the
+safest being the direct application of $T$ and $R$ to the data vectors---. Thus,
+more than serving the algorithmic implementation of the model, which may
+prescind from them, these matrices provide insight into the nature of the
+transformations involved in the model.
 
 
 \section{Results}
@@ -382,7 +479,7 @@ above greatly improves the performance of the model. The use of weighted instead
 of arithmetic averages in the formulas for $\delta$ and $\rho$ is useful in
 dealing with the excessive influence of outliers or highly spread out points in
 the feature. For example, the weight vectors may be computed using the MAD or
-the inverse-variance of each $x$. 
+the inverse-variance of each $t \in \textbf{t}$. 
 
 For example, using inverse-variance weights accuracy increased to $\approx
 90.2\%$. The confusion matrix of this last model can be appreciated in
@@ -503,6 +600,35 @@ We know $S^k_1S^k_2 \geq k^2$ and then it suffices to show $t_{k+1}S_1^k +
 We have $\min f=2$  for $f(x)=x+\frac{1}{x}$ for $x \in \mathbb{R}^+$. Then
 $\min(a+\frac{1}{a}+...+n+\frac{1}{n})=2k$ for $a,..., n \in \mathbb{R}^+$,
 which concludes the demonstration.
+
+\textbf{Proof 2.} In \textbf{Remark 2}, we observe that $\rho$ is implicitly
+used in the traditional measures of relative amplitude. Recall that such methods
+consist in taking the average paired-pulse response and dividing it by the
+average test-pulse response. It is easily observed that
+
+\begin{align*} \frac{\mu_x}{\mu_d} = \frac{\frac{1}{n}\sum_{j=1}^n
+        x_{j}}{\frac{1}{m}\sum_{j = 1}^m t_j} 
+        = \frac{\rho(x_{1i})+\cdots + \rho(x_{ni})}{n}
+\end{align*}
+
+\begin{proof}[Theorem 1]
+
+    Let $\sigma = \sum_{i=1}^m t_j$ and $c \in \mathbb{R}$. It follows directly
+    from the definition of $\rho$ that
+
+    \begin{align*}
+        T(c\textbf{x} + \textbf{y}) &= \begin{bmatrix} \frac{m(cx_1) + y_1}{\sigma} &
+        \ldots& \frac{m(cx_n + y_n)}{\sigma} \end{bmatrix}^\intercal \\ 
+                                    &=\begin{bmatrix} 
+                                        \frac{mcx_1}{\sigma} +
+                                        \frac{my_1}{\sigma} & \ldots &
+                                        \frac{mcx_n}{\sigma} + \frac{y_n}{\sigma} 
+                                    \end{bmatrix} \\
+                                    &=cT(\textbf{x}) + T(\textbf{y})
+    \end{align*}
+
+    The proof the $R$ is linear is practically identical.
+\end{proof}
 
 \end{document}
 

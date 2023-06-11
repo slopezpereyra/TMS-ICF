@@ -35,23 +35,15 @@ function group_analysis(an, col=:SRA)
     rename!(an, 3 => :SRA)
 end
 
-df = CSV.read("LnDF.csv", DataFrame)
+df = CSV.read("df.csv", DataFrame)
 display(df)    
 
-s_df = subject_analysis(df)
-display(s_df)
-g_df = group_analysis(s_df)
-display(df)
+length(df.Sample)
+
+length(unique(df.Subject))
+print(unique(df.ISI))
+
+x = filter([:Subject, :ISI] => (x, y) -> x == 18 && y == 15, df)
+print(x)
 
 
-set_ρ(df)
-set_ρ_ln(df)
-set_ρ₂(df)
-set_ρ₂_ln(df)
-df = compute_inverse_variance_weights(df)
-set_weighted_ρ()
-set_weighted_ρ₂()
-
-display(df)
-
-CSV.write("full_df.csv", df)

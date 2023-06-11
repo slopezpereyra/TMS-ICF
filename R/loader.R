@@ -69,7 +69,7 @@ get_session_as_number <- function(session_name) {
 }
 
 # Horrible but serves its purpose and will
-# only be called once in human history.
+# only be called once in human history *cringes*
 get_label <- function(df) {
     if ((df$Group[1] == 1) && (df$Type == "SWD")) {
         return("HC SWD")
@@ -155,7 +155,6 @@ get_subject_data <- function(df, subject) {
     return(df)
 }
 
-
 create_isi_col <- function(df) {
     len <- nrow(df)
     vec <- c()
@@ -185,18 +184,18 @@ integrity_test <- function(df) {
     return(wrongs)
 }
 
-df <- load_data() %>% clean_data()
-write_csv(df, "df.csv")
-View(df)
-t <- read_delim("SWIP_018_S1.txt",
-    delim = "\t", comment = "#", na = c("", "NA", "(null)"),
-    col_types = cols_only(
-        `Sample Name` = col_character(),
-        `Session Name` = col_character(),
-        `EMG Peak-to-peak 1` = col_number()
-    )
-)
-
-View(t)
-View(get_subject_data(df, 9))
-df
+#df <- load_data() %>% clean_data()
+#write_csv(df, "df.csv")
+#View(df)
+#t <- read_delim("SWIP_018_S1.txt",
+#    delim = "\t", comment = "#", na = c("", "NA", "(null)"),
+#    col_types = cols_only(
+#        `Sample Name` = col_character(),
+#        `Session Name` = col_character(),
+#        `EMG Peak-to-peak 1` = col_number()
+#    )
+#)
+#
+#View(t)
+#View(get_subject_data(df, 9))
+#df
