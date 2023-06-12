@@ -161,7 +161,7 @@ create_isi_col <- function(df) {
     if (len == 120) # If this ICF has 120 pulses.
         {
             vec <- ISI_ORDER_120
-        } else if (len == 72) # If this ICF has 120 pulses.
+        } else if (len == 72) # If this ICF has 72 pulses.
         {
             vec <- ISI_ORDER_72
         } else if (len == 118) {
