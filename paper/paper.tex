@@ -308,10 +308,10 @@ paired and test stimulations, respectively.
     \end{equation}
 \end{definition}
 
-\begin{remark} 
+\begin{theorem} 
     $\forall x: x \in \mathbb{R}^+:\delta(x) \geq \rho(x)$. (For a proof of this
     property, consult the appendix.) 
-\end{remark}
+\end{theorem}
 
 Notice that $\rho(x)$ is the proportion between the potential $x$, evoked by a
 paired stimulation, with respect to the average potential of single test
@@ -331,7 +331,7 @@ $\delta$ and $\rho$ \textit{features} (\textit{id est}, of the data resulting
 from broadcasting $\rho$ and $\delta$ over a collection of evoked potentials),
 such features are understood to be subject- and session-specific.
 
-\begin{remark}
+\begin{theorem}
     Let $\pi$ denote the coefficient traditionally used for estimating the
     relative amplitude between test and paired pulses. In accordance to what was
     described in the second paragraph of Section $4$,
@@ -348,7 +348,7 @@ such features are understood to be subject- and session-specific.
     .\end{align*}
 
     (For a proof, consult the appendix.)
-\end{remark}
+\end{theorem}
 
 The second remark is of great importance. It states that the way in which
 relative amplitude was traditionally computed---the way in which neuroplasticity
@@ -360,23 +360,24 @@ certain degree of confidence, insofar as not only it is not entirely new, but
 neuroscientists have implicitly used it all along.
 
 
-\subsection{Generalizing to many subjects}
+\subsection{Generalizing to multiple subjects}
 
 
 \begin{definition}
-    Let $\textbf{x} \in \mathbb{R}^j$. Then we define $T(\textbf{x}) := \begin{bmatrix} 
+    Let $\textbf{x} \in \mathbb{R}^j$ with $j \in \mathbb{N}$. Then $T:
+    \mathbb{R}^j \to \mathbb{R}^j, R : \mathbb{R}^j \to \mathbb{R}^j$ are the
+    linear transformations defined as
+
+    $T(\textbf{x}) := \begin{bmatrix} 
         \rho(x_1) & \ldots & \rho(x_j)
     \end{bmatrix}^\intercal $ and $R(\textbf{x}) := \begin{bmatrix} 
         \delta(x_1) & \ldots & \delta(x_j) 
     \end{bmatrix}^\intercal $.
 \end{definition}
 
-\begin{theorem}
-    The mappings $T, R$ are linear transformations.
-\end{theorem}
-
-Let $k \in \mathbb{N}$ denote the number of experimental subjects in an
-experiment, to each of whom $n, m$ paired and test pulses were elicited,
+It is trivial to show that $T$ and $R$ are linear mappings (consult the
+Appendix). Now let $k \in \mathbb{N}$ denote the number of experimental subjects
+in an experiment, to each of whom $n, m$ paired and test pulses were elicited,
 respectively.
 
 \begin{definition}
@@ -386,24 +387,17 @@ respectively.
 \end{definition}
 
 \begin{definition}
-    Let $\mu^{(t)}_i$ be average test-pulse response of the $i$th subject. Then
-    we define
-    $\textbf{M}^{k \times k}$ a diagonal matrix with $\textbf{M}_{(ii)} =
-    \frac{1}{\mu^{(t)}_{i}}$.
+    Let $\mu^{(t)}_i$ be average test-pulse response of the $i$th subject. Let
+    $\mu^{(t)^{-1}}_i$ be the average \textit{reciprocal} test-pulse response of
+    the $i$th subject. Then $\textbf{M}^{k \times k}$ is a diagonal matrix with
+    $\textbf{M}_{(ii)} := \frac{1}{\mu^{(t)}_{i}}$, and $\textbf{M'}^{~ k \times
+    k}$ is a diagonal matrix with $\textbf{M'}_{ii} := \mu^{(t^{-1})}_i$.
 \end{definition}
 
 \begin{theorem}
-    The row-vectors of the matrix $\textbf{X}_\rho = \textbf{M}\textbf{P}$ are the
-    vectors $T(\textbf{x}^{(1)}), \ldots, T(\textbf{x}^{(k)})$.
-\end{theorem}
-
-Similarly, if we let $\textbf{M'}$ be a diagonal matrix such that
-$\textbf{M'}_{ii} = \mu^{(t^{-1})}_i$, where $\mu^{(t^{-1})}_i$ denotes the
-average \textit{inverse} test-pulse response of the $i$th subject, we come to
-the following result. 
-
-\begin{theorem}
-    The row-vectors of the matrix $\textbf{X}_\delta = \textbf{M'}\textbf{P}$ 
+    The row-vectors of $\textbf{X}_\rho = \textbf{M}\textbf{P}$ are the
+    vectors $T(\textbf{x}^{(1)}), \ldots, T(\textbf{x}^{(k)})$, and
+    the row-vectors of $\textbf{X}_\delta = \textbf{M'}\textbf{P}$ 
     are the vectors $R(\textbf{x}^{(1)}), \ldots,
     R(\textbf{x}^{(k)})$.
 \end{theorem}
@@ -423,7 +417,7 @@ is usual to excluded some pulses due to the presence of artifacts. There are
 many ways to deal with this situation in the implementation of our model---the
 safest being the direct application of $T$ and $R$ to the data vectors---. Thus,
 more than serving the algorithmic implementation of the model, which may
-prescind from them, these matrices provide insight into the nature of the
+prescind from them, these matrices provide insight into the exact nature of the
 transformations involved in the model.
 
 
