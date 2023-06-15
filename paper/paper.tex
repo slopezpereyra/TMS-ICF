@@ -293,29 +293,29 @@ paired and test stimulations, respectively.
 
 \begin{definition} 
 
-
-    Let $x \in \textbf{x}$ be the evoked potential of a single paired
-    stimulation. Then we define two pulse-specific relative amplitude measures,
-    $\rho : \mathbb{R} \to \mathbb{R}, \delta : \mathbb{R} \to \mathbb{R}$,
-    where
+    Let $x \in \mathbb{R}^+$ be the evoked potential of a single paired
+    stimulation, and $\textbf{t} \in \mathbb{R}^m$. Then we define two
+    pulse-specific relative amplitude measures, $\rho : \mathbb{R} \times
+    \mathbb{R}^m \to
+    \mathbb{R}, \delta : \mathbb{R}\times \mathbb{R}^m \to \mathbb{R}$, where
 
     \begin{equation} 
-        \rho(x) := \frac{mx}{\sum_{i=1}^mt_j}
+        \rho(x, \textbf{t}) := \frac{mx}{\sum_{i=1}^mt_j}
     \end{equation}
 
     \begin{equation} 
-        \delta(x) := \frac{x}{m}\sum_{j=1}^m\frac{1}{t_j} 
+        \delta(x, \textbf{t}) := \frac{x}{m}\sum_{j=1}^m\frac{1}{t_j} 
     \end{equation}
 \end{definition}
 
 \begin{theorem} 
-    $\forall x: x \in \mathbb{R}^+:\delta(x) \geq \rho(x)$. (For a proof of this
-    property, consult the appendix.) 
+    $\forall x: x \in \mathbb{R}^+:\delta(x, \textbf{t}) \geq \rho(x,
+    \textbf{t})$. (For a proof of this property, consult the appendix.) 
 \end{theorem}
 
-Notice that $\rho(x)$ is the proportion between the potential $x$, evoked by a
-paired stimulation, with respect to the average potential of single test
-stimulations. On the other hand, $\delta(x)$ is the average proportion of $x$
+The function $\rho$ represents the proportion between a potential $x$, evoked by
+a paired stimulation, with respect to the average potential of single test
+stimulations. On the other hand, $\delta$ is the average proportion of $x$
 with respect to each single test pulse. 
 
 To put it differently, $\rho$ is a representation of the relative importance of
@@ -331,6 +331,7 @@ $\delta$ and $\rho$ \textit{features} (\textit{id est}, of the data resulting
 from broadcasting $\rho$ and $\delta$ over a collection of evoked potentials),
 such features are understood to be subject- and session-specific.
 
+
 \begin{theorem}
     Let $\pi$ denote the coefficient traditionally used for estimating the
     relative amplitude between test and paired pulses. In accordance to what was
@@ -344,7 +345,7 @@ such features are understood to be subject- and session-specific.
     respectively. It follows from the definition of $\pi$ and $\rho$ that
 
     \begin{align*}
-        \pi = \frac{\rho(x_1) + \ldots + \rho(x_n)}{n}
+        \pi = \frac{\rho(x_1, \textbf{t}) + \ldots + \rho(x_n, \textbf{t})}{n}
     .\end{align*}
 
     (For a proof, consult the appendix.)
@@ -359,6 +360,22 @@ measure in an experimental session. We believe this bestows $\rho$ with a
 certain degree of confidence, insofar as not only it is not entirely new, but
 neuroscientists have implicitly used it all along.
 
+\begin{remark}
+    Observe that 
+    \begin{align*}
+        \frac{\partial \rho}{\partial x } &= \frac{m}{\sum_{i = 1}^m
+        t_j} \\ \frac{\partial \rho}{\partial t_i} &= -\frac{xm}{\big( \sum_{j =
+        1}^m t_j \big)^2} \\ 
+                    \frac{\partial \delta}{\partial x} &= \frac{1}{m}\sum_{i =
+                    1}^m t_i \\ 
+                        \frac{\partial \delta}{\partial t_i} &= -\frac{x}{mt_i^2}
+    \end{align*}
+\end{remark}
+
+Since $\textbf{t}$ remains constant in the computation of the different relative
+amplitudes of $\textbf{x}_1, \ldots, \textbf{x}_n$, we shall use from now
+onwards the notation $\rho(x), \delta(x)$ to denote $\rho(x, \textbf{t})$ and
+$\delta(x, \textbf{t})$, respectively.
 
 \subsection{Generalizing to multiple subjects}
 

@@ -36,6 +36,7 @@ function group_analysis(an, col=:SRA)
 end
 
 df = CSV.read("df.csv", DataFrame)
+df = X
 display(df)    
 
 length(df.Sample)

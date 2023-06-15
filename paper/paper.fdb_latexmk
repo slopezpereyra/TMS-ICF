@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1686524331 "paper.tex" "paper.pdf" "paper" 1686524331 2
+["pdflatex"] 1686765310 "paper.tex" "paper.pdf" "paper" 1686765311 2
   "/etc/texmf/web2c/texmf.cnf" 1683163658 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -98,8 +98,8 @@
   "images//cm-raw.png" 1681415985 74075 4e580ab9efd4b35c138b469de4b8a044 ""
   "images//cm-rho-delta.png" 1681499081 67554 c2e06a1c6f2086d5a9d532679a1e5e65 ""
   "images//final-cm.png" 1681499147 67158 3485037970cd1d9a5e02f28b0cd194f6 ""
-  "paper.aux" 1686524331 2899 7fad990e90490ae0e61da27528538eae "pdflatex"
-  "paper.tex" 1686524329 28470 85c8f5b291f467ab76b32c8b217bf670 ""
+  "paper.aux" 1686765311 2899 2c97d7b0a58d764e2410dfa2d0e3b1a5 "pdflatex"
+  "paper.tex" 1686765310 29352 42c5ffc672ea4e2b15074dc496e44913 ""
   (generated)
   "paper.aux"
   "paper.log"
