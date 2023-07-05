@@ -1,0 +1,18 @@
+greenlet==2.0.2           # via pynvim
+msgpack==1.0.5            # via pynvim
+nodeenv==1.8.0            # via pyright
+numpy==1.24.3             # via pandas, patsy, scipy, statsmodels
+packaging==23.1           # via statsmodels
+pandas==2.0.2             # via -r requirements.in, statsmodels
+patsy==0.5.3              # via statsmodels
+pynvim==0.4.3             # via -r requirements.in
+pyright==1.1.314          # via -r requirements.in
+python-dateutil==2.8.2    # via pandas
+pytz==2023.3              # via pandas
+scipy==1.10.1             # via statsmodels
+six==1.16.0               # via patsy, python-dateutil
+statsmodels==0.14.0       # via -r requirements.in
+tzdata==2023.3            # via pandas
+
+# The following packages are considered to be unsafe in a requirements file:
+setuptools==67.8.0        # via nodeenv

@@ -3,7 +3,7 @@
 .Rapp.history
 
 #CSVs
-.csv
+*.csv
 
 #LaTex 
 .gz

@@ -3,6 +3,7 @@ using CSV
 using Statistics
 using Plots
 using StatsPlots
+using Clustering
 include("jl/math.jl")
 
 function sra(pulses, subject, session)
@@ -35,9 +36,25 @@ function group_analysis(an, col=:SRA)
     rename!(an, 3 => :SRA)
 end
 
-df = CSV.read("df.csv", DataFrame)
-df = X
+sdf = subject_analysis(df)
+gdf = group_analysis(sdf)
+
+grouped = groupby(gdf, [:Label, ISI])
+plot()
+x = gdf.ISI
+for group in grouped 
+    print(group)
+    cat = group[1, :Label][1]
+    y = group[:, :SRA]
+    plot!(x, y, label=cat, marker = :circle)
+end
+display(plot)
+
+df = CSV.read("full_df.csv", DataFrame)
+df = dropmissing(df)
+sdf = subject_analysis(df)
 display(df)    
+CSV.write("GROUPAN_DF.csv", gdf)
 
 length(df.Sample)
 
@@ -47,4 +64,8 @@ print(unique(df.ISI))
 x = filter([:Subject, :ISI] => (x, y) -> x == 18 && y == 15, df)
 print(x)
 
+features = hcat(df.ISI, df.EMGPeakToPeak, df.RRA, df.RRA2)
+result = kmeans(features, 4)
+df
+scatter(df.RRA, df.RRA2, marker_z = result.assignments)
 

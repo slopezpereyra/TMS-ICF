@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1686765310 "paper.tex" "paper.pdf" "paper" 1686765311 2
+["pdflatex"] 1687479295 "paper.tex" "paper.pdf" "paper" 1687479296 2
   "/etc/texmf/web2c/texmf.cnf" 1683163658 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -42,7 +42,6 @@
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb" 1248133631 32762 224316ccc9ad3ca0423a14971cfa7fc1 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb" 1248133631 32726 0a1aea6fcd6468ee2cf64d891f5c43c8 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1248133631 32569 5e5ddc8df908dea60932f3c484a54c0d ""
-  "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb" 1248133631 32915 7bf7720c61a5b3a7ff25b0964421c9b6 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb" 1248133631 32716 08e384dc442464e7285e891af9f45947 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb" 1248133631 37944 359e864bd06cde3b1cf57bb20757fb06 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam7.pfb" 1248133631 33366 60462f3d16c3d0f024f1f856e64b09cd ""
@@ -98,8 +97,8 @@
   "images//cm-raw.png" 1681415985 74075 4e580ab9efd4b35c138b469de4b8a044 ""
   "images//cm-rho-delta.png" 1681499081 67554 c2e06a1c6f2086d5a9d532679a1e5e65 ""
   "images//final-cm.png" 1681499147 67158 3485037970cd1d9a5e02f28b0cd194f6 ""
-  "paper.aux" 1686765311 2899 2c97d7b0a58d764e2410dfa2d0e3b1a5 "pdflatex"
-  "paper.tex" 1686765310 29352 42c5ffc672ea4e2b15074dc496e44913 ""
+  "paper.aux" 1687479296 3105 a3556a2162cc8adde6405f4c53bdc4e4 "pdflatex"
+  "paper.tex" 1687479294 30148 e7af80322f5da6cf29dae44b23ad7185 ""
   (generated)
   "paper.aux"
   "paper.log"

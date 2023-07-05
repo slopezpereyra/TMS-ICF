@@ -22,18 +22,6 @@ const ISIORDER72 = [
     15, 15, 4, 8, 20, 4, 20, 4, -1, -1, 10, 20, -1, 15, 5, 20, 4
 ]
 
-const S09_S1_BAD = [35, 37, 38, 40, 41, 43, 44, 46, 48, 50, 52, 54, 56, 57, 58, 59, 60,
-    62:68, 70:85, 87:94, 96:192, 104:111, 113, 114,
-    116:119, 121, 122, 124, 126:130, 132:134, 136:140,
-    142, 144, 145, 147, 148, 149, 151, 152]
-
-const S18_S1_GOOD = [81, 82, 84, 87, 89, 90, 93, 112,
-    124, 129, 131, 134, 136, 137, 140, 142, 147, 149, 151]
-const S18_S2_BAD = [38, 40, 42, 49, 51, 56, 59,
-    61:66, 68:72, 74:78, 82, 83,
-    85, 87, 88, 90, 93, 96, 98, 99,
-    100, 103, 105, 107] #107 is last icf
-
 const S49_S2_BAD = [55, 57, 116, 117, 120,
     121, 124, 125, 134, 135,
     136, 137, 152, 153, 154,
@@ -106,7 +94,6 @@ const TOTAL_BADS = length(BADS)
      "ICF_LAST"    70  1  2  "BL"   4           92.3532
 """
 function read_swipf(f::String)::Matrix
-
     a = readdlm(f, '\t')
     if size(a, 2) != 14
         @warn "Inconsistent feature count on" f
@@ -164,7 +151,7 @@ function add_isi_feature(X::Matrix, f::String)
     icf_count = to - from + 1
     if icf_count != 120 && icf_count != 72
         print(f, "\n")
-        @warn "WARNING: Erroneous ICF count on " f
+        @warn "WARNING: Erroneous ICF count on " f " with count " icf_count
     end
     if any(x -> !isa(x, Real), X[:, 2])
         error("Non-numeric EMG ", f)
@@ -238,11 +225,3 @@ function get_label(group, type)::String
         return type == "BL" ? "MDD BL" : "MDD SWD"
     end
 end
-
-get_label.(X.Group, X.Type)
-
-read_swipf("Data/SWIP_070_S2.txt")
-X = read_swipf()
-
-rename!(X, COLNAMES)
-CSV.write("JL_DF.csv", X)

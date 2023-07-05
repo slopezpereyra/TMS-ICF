@@ -313,10 +313,10 @@ paired and test stimulations, respectively.
     \textbf{t})$. (For a proof of this property, consult the appendix.) 
 \end{theorem}
 
-The function $\rho$ represents the proportion between a potential $x$, evoked by
-a paired stimulation, with respect to the average potential of single test
-stimulations. On the other hand, $\delta$ is the average proportion of $x$
-with respect to each single test pulse. 
+The function $\rho$ represents the proportion between a potential $x \in
+\textbf{x}$ with respect to the average
+potential of single test stimulations. On the other hand, $\delta$ is the
+average proportion of $x$ with respect to each single test pulse. 
 
 To put it differently, $\rho$ is a representation of the relative importance of
 each double pulse in relation to the overall distribution of the test pulses in
@@ -333,44 +333,36 @@ such features are understood to be subject- and session-specific.
 
 
 \begin{theorem}
-    Let $\pi$ denote the coefficient traditionally used for estimating the
-    relative amplitude between test and paired pulses. In accordance to what was
-    described in the second paragraph of Section $4$,
+
+    Let 
 
     \begin{align*}
-        \pi = \frac{\mu_x}{\mu_t}
-    .\end{align*}
+        \tau = \frac{\bar{x}}{\bar{t}}
+    \end{align*}
 
-    where $\mu_x, \mu_t$ are the mean paired and test pulse responses,
-    respectively. It follows from the definition of $\pi$ and $\rho$ that
+    where $\bar{x}, \bar{t}$ are the average paired and test pulse responses,
+    respectively. Then
 
     \begin{align*}
-        \pi = \frac{\rho(x_1, \textbf{t}) + \ldots + \rho(x_n, \textbf{t})}{n}
-    .\end{align*}
+        \tau = \frac{1}{n} \sum_{i = 1}^n \rho(x_i, \textbf{t})
+    \end{align*}
 
     (For a proof, consult the appendix.)
 \end{theorem}
 
-The second remark is of great importance. It states that the way in which
+Here, $\tau$ is the coefficient traditionally used for estimating the relative
+amplitude between test and paired pulses (Lefaucher, 2019), in accordance to
+what was described in the second paragraph of \textbf{Section 4}.
+
+The previous theorem is of great importance. It states that the way in which
 relative amplitude was traditionally computed---the way in which neuroplasticity
 was traditionally proxied---is different from our proposed $\rho$ function only
 in terms of scale. More specifically, the traditional coefficient used to proxy
-neuroplasticity at the subject level is nothing but the mean $\rho$
-measure in an experimental session. We believe this bestows $\rho$ with a
-certain degree of confidence, insofar as not only it is not entirely new, but
-neuroscientists have implicitly used it all along.
+neuroplasticity at the subject level is nothing but the mean $\rho$ measure in
+an experimental session. We believe this bestows $\rho$ with a certain degree of
+confidence, insofar as not only it is not entirely new, but neuroscientists have
+implicitly used it all along.
 
-\begin{remark}
-    Observe that 
-    \begin{align*}
-        \frac{\partial \rho}{\partial x } &= \frac{m}{\sum_{i = 1}^m
-        t_j} \\ \frac{\partial \rho}{\partial t_i} &= -\frac{xm}{\big( \sum_{j =
-        1}^m t_j \big)^2} \\ 
-                    \frac{\partial \delta}{\partial x} &= \frac{1}{m}\sum_{i =
-                    1}^m t_i \\ 
-                        \frac{\partial \delta}{\partial t_i} &= -\frac{x}{mt_i^2}
-    \end{align*}
-\end{remark}
 
 Since $\textbf{t}$ remains constant in the computation of the different relative
 amplitudes of $\textbf{x}_1, \ldots, \textbf{x}_n$, we shall use from now
@@ -381,15 +373,18 @@ $\delta(x, \textbf{t})$, respectively.
 
 
 \begin{definition}
-    Let $\textbf{x} \in \mathbb{R}^j$ with $j \in \mathbb{N}$. Then $T:
-    \mathbb{R}^j \to \mathbb{R}^j, R : \mathbb{R}^j \to \mathbb{R}^j$ are the
+    Let $\textbf{x} \in \mathbb{R}^n$ with $n \in \mathbb{N}$. Then $T:
+    \mathbb{R}^n \to \mathbb{R}^n, R : \mathbb{R}^n \to \mathbb{R}^n$ are the
     linear transformations defined as
 
-    $T(\textbf{x}) := \begin{bmatrix} 
-        \rho(x_1) & \ldots & \rho(x_j)
-    \end{bmatrix}^\intercal $ and $R(\textbf{x}) := \begin{bmatrix} 
-        \delta(x_1) & \ldots & \delta(x_j) 
-    \end{bmatrix}^\intercal $.
+    \begin{align*}
+        T(\textbf{x}) &:= \begin{bmatrix} 
+        \rho(x_1) & \ldots & \rho(x_n)
+        \end{bmatrix}^\intercal \\ R(\textbf{x}) &:= \begin{bmatrix} 
+        \delta(x_1) & \ldots & \delta(x_n) 
+    \end{bmatrix}^\intercal
+    \end{align*}
+
 \end{definition}
 
 It is trivial to show that $T$ and $R$ are linear mappings (consult the
@@ -404,11 +399,12 @@ respectively.
 \end{definition}
 
 \begin{definition}
-    Let $\mu^{(t)}_i$ be average test-pulse response of the $i$th subject. Let
-    $\mu^{(t)^{-1}}_i$ be the average \textit{reciprocal} test-pulse response of
-    the $i$th subject. Then $\textbf{M}^{k \times k}$ is a diagonal matrix with
-    $\textbf{M}_{(ii)} := \frac{1}{\mu^{(t)}_{i}}$, and $\textbf{M'}^{~ k \times
-    k}$ is a diagonal matrix with $\textbf{M'}_{ii} := \mu^{(t^{-1})}_i$.
+    Let $\overline{t}_i$ be average test-pulse response of the $i$th subject.
+    Let $\hat{t}_i$ be the average of the \textit{reciprocal}
+    responses on the $i$th subject. Then $\textbf{M}^{k \times k}$ is a diagonal
+    matrix with $\textbf{M}_{(ii)} := \frac{1}{\overline{t}_i}$, and
+    $\textbf{M'}^{~ k \times k}$ is a diagonal matrix with $\textbf{M'}_{ii} :=
+    \hat{t}_i$.
 \end{definition}
 
 \begin{theorem}
@@ -432,10 +428,10 @@ each subject, none of $n$ paired pulses were anomalous, and hence all can be
 safely included in the model. Such assumption rarely holds in reality, where it
 is usual to excluded some pulses due to the presence of artifacts. There are
 many ways to deal with this situation in the implementation of our model---the
-safest being the direct application of $T$ and $R$ to the data vectors---. Thus,
-more than serving the algorithmic implementation of the model, which may
-prescind from them, these matrices provide insight into the exact nature of the
-transformations involved in the model.
+safest being the direct application of $T$ and $R$ to the artifact-excluded data
+vectors---. Thus, more than serving the algorithmic implementation of the model,
+which may prescind from them, these matrices provide insight into the exact
+nature of the transformations involved in the model.
 
 
 \section{Results}
@@ -560,6 +556,38 @@ the nature of the experimental data itself.
 
 \section{Appendix}
 
+\subsection{Further theory}
+
+Observe that
+
+\begin{align*}
+    \frac{\partial \rho}{\partial x } &= \frac{1}{\overline{t}}  \\ 
+     \frac{\partial \rho}{\partial t_i} &= -\frac{x}{m\overline{t}^{~ 2}}
+\end{align*}
+
+We recall that $t_i, x_i \in \mathbb{R}^{+}$ by assumption, from which follows
+that $\rho$ is constantly increasing with respect to $x$ and
+decreasing with respect to $\textbf{t}$. Similarly,
+
+\begin{align*} 
+    \frac{\partial \delta}{\partial x} &= \overline{t}\\ 
+    \frac{\partial \delta}{\partial t_i} &= -\frac{x}{mt_i^2}
+\end{align*}
+
+This result extends the property noted in \textbf{Theorem 1}. Namely, not only
+is $\delta$ greater than $\rho$ for any $x$, but it also has a greater constant
+rate of change when $t > 1$---which is always the case with non-anomalous EMG
+peak to peak values.
+
+Furthermore, we found that $\rho$ can be alternatively defined as 
+
+\begin{align*}
+    \delta(x, \textbf{t}) = -\frac{x}{m}\int \frac{1}{t_i^2} dt_i \\ 
+    \rho(x, \textbf{t}) &= -\frac{x}{m}\int \frac{1}{\overline{t}^2}
+\end{align*}
+
+\subsection{Proofs}
+
 \textbf{Proof 1}. In \textbf{Remark 1}, we observed the following property:
 
     \begin{align*}
@@ -577,8 +605,8 @@ Let $S_1^m = \sum^m\frac{1}{t_j}, S_2^m= \sum^m t_j$. We operate under the
 assumption that $t_i \in \mathbb{R}^+$. It is the case that
 
 \begin{align*} 
-    \frac{x}{m}\sum^m\frac{1}{t_j} &\geq \frac{xm}{\sum^m t_j} \\ 
-    S_2^mS_1^m &\geq m^2
+    &\frac{x}{m}\sum^m\frac{1}{t_j} \geq \frac{xm}{\sum^m t_j} \iff 
+    S_2^mS_1^m \geq m^2
 \end{align*}
 
 This holds for $m=1$, since $\frac{1}{t_1}+t_1 \geq 1 \iff 1+t_1^2 \geq t_1$. So
@@ -597,7 +625,7 @@ This can be proven as follows.
     S^k_1S^k_2+ t_{k+1}S_1^k + \frac{1}{t_{k+1}}S^k_2 &\geq k^2+2k 
 \end{align*}
 
-We know $S^k_1S^k_2 \geq k^2$ and then it suffices to show $t_{k+1}S_1^k +
+By hypothesis, $S^k_1S^k_2 \geq k^2$, and then it suffices to show $t_{k+1}S_1^k +
 \frac{S^k_2}{t_{k+1}}\geq 2k$. To prove this, simply observe that
 
 \begin{align*}
@@ -612,17 +640,23 @@ We have $\min f=2$  for $f(x)=x+\frac{1}{x}$ for $x \in \mathbb{R}^+$. Then
 $\min(a+\frac{1}{a}+...+n+\frac{1}{n})=2k$ for $a,..., n \in \mathbb{R}^+$,
 which concludes the demonstration.
 
-\textbf{Proof 2.} In \textbf{Remark 2}, we observe that $\rho$ is implicitly
+~
+
+\textbf{Proof 2.} In \textbf{Theorem 2}, we observed that $\rho$ is implicitly
 used in the traditional measures of relative amplitude. Recall that such methods
 consist in taking the average paired-pulse response and dividing it by the
 average test-pulse response. It is easily observed that
 
-\begin{align*} \frac{\mu_x}{\mu_d} = \frac{\frac{1}{n}\sum_{j=1}^n
-        x_{j}}{\frac{1}{m}\sum_{j = 1}^m t_j} 
-        = \frac{\rho(x_{1i})+\cdots + \rho(x_{ni})}{n}
+\begin{align*} 
+    \frac{\bar{x}}{\bar{t}}
+         &= \frac{1}{n} \Big(\frac{ \sum_{i = 1}^n mx_i}{\sum_{i = 1}^m
+             t_i}\Big) \\ 
+         &= \frac{1}{n} \Big(\frac{ mx_1}{\sum_{i = 1}^m t_i} + \ldots + \frac{
+             mx_n}{\sum_{i = 1}^m t_i}\Big) \\ 
+         &= \frac{1}{n} \sum_{i = 1}^n \rho(x_i, \textbf{t})
 \end{align*}
 
-\begin{proof}[Theorem 1]
+\begin{proof}[Theorem 3]
 
     Let $\sigma = \sum_{i=1}^m t_j$ and $c \in \mathbb{R}$. It follows directly
     from the definition of $\rho$ that
@@ -638,7 +672,7 @@ average test-pulse response. It is easily observed that
                                     &=cT(\textbf{x}) + T(\textbf{y})
     \end{align*}
 
-    The proof the $R$ is linear is practically identical.
+    The proof that $R$ is linear is practically identical.
 \end{proof}
 
 \end{document}
